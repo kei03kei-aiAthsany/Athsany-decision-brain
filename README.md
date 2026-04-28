@@ -9,7 +9,7 @@
 Athsany is not a chat AI, not a writing assistant, and not a simple trading signal bot.  
 It is an always‑on **Decision Brain** that sits on top of events and data, turning real‑world signals into a continuous decision loop with long‑term memory and self‑correction.
 
-Instead of waking an AI with prompts, Athsany autonomously reads news, data, and market movements, maintains decision context over time, and learns from every decision–outcome pair.
+Instead of waking an AI with prompts, Athsany continuously reads real‑world events, data, and market movements, maintains decision context over time, and keeps learning from how each decision actually plays out.
 
 **中文簡介**
 
@@ -56,6 +56,17 @@ This allows the system to:
 
 ---
 
+### From gut feeling to readable memory
+
+Most high‑stakes decisions today still depend on experience and gut feeling that live in people’s heads, chats, and meetings, but are hard to see, audit, or reuse as a system.
+
+Athsany’s decision brain and decision memory are designed to **turn those tacit reactions into explicit, searchable decision history** – so that “how we usually handle this” becomes part of a readable, upgradeable decision infrastructure.
+
+**中文說明**  
+很多關鍵決策其實來自經驗與直覺，散落在人腦裡、聊天室裡、會議紀錄裡，很難被看見或重用。Athsany 要做的，就是把這些「感覺上的做法」變成可閱讀、可查閱、可優化的決策基建。
+
+
+
 ## Why Finance First, But Not Finance Only
 
 Financial markets (e.g. HSI futures, XAUUSD) are our most complete demonstration environment today, not the final scope of Athsany.
@@ -83,7 +94,7 @@ The same event → risk → strategy → execution → review pattern can be app
 
 ## Roadmap / Status
 
-_Current status (example, adjust to your real stage):_
+_Current status (will be updated as the system evolves):_
 
 - ✅ Internal prototypes for event ingestion, decision logging, and memory structures  
 - ✅ Demo use‑cases on HSI futures and XAUUSD to validate the full loop  
@@ -100,9 +111,10 @@ This repository is focused on **concepts and architecture**, not full production
 ```text
 .
 ├── docs/
-│   ├── architecture.md        # High‑level system architecture
+│   ├── architecture.md        # High-level system architecture
 │   ├── decision-loop.md       # Event → Risk → Strategy → Execution → Review
-│   └── decision-memory.md     # How decision memory is structured
+│   ├── decision-memory.md     # How decision memory is structured
+│   └── use-cases.md           # Cross-domain applications of Athsany
 ├── examples/
 │   ├── finance-hsi-xauusd/    # Finance demo scenarios
 │   └── (future domains)/
@@ -119,3 +131,5 @@ As the project evolves, this repo can grow into:
 - Domain‑specific examples beyond finance
 
 ▶ More Athsany videos and live demos: https://www.youtube.com/channel/UCiMWr8y37j0DJpB4vBMFVGg
+
+
