@@ -117,3 +117,5 @@ As the project evolves, this repo can grow into:
 - Public specifications of Athsany’s decision brain architecture  
 - Reference implementations and demo notebooks  
 - Domain‑specific examples beyond finance
+
+▶ More Athsany videos and live demos: https://www.youtube.com/channel/UCiMWr8y37j0DJpB4vBMFVGg
