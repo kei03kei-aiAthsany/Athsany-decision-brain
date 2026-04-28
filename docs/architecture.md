@@ -23,3 +23,18 @@ Athsany 的架構目標不是做一個聊天界面，而是建立一個常駐在
 - **Explanation / review module** – 協助解釋「為什麼這樣決策、錯在哪、如何修正」
 
 （之後你可以慢慢補充更多內容，呢度先做第一版。）
+
+## Layers Overview
+
+- **Interface layer** – where humans and other systems see Athsany (dashboards, APIs, alerts)  
+- **Decision brain layer** – the core loop and decision memory (this repo focuses on this layer)  
+- **Execution / integration layer** – connectors to trading systems, risk engines, or other operational systems
+
+## Documentation Status
+
+This document currently focuses on the core decision brain layer.  
+Planned additions:
+
+- More detail on how decision memory is persisted and queried  
+- Examples of event and risk schemas across different domains  
+- Integration patterns with existing trading / risk / operational systems
