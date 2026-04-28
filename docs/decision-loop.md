@@ -1,7 +1,7 @@
 # Decision Loop – Athsany’s Always‑On Flow
 
 Athsany is built around a single idea:  
-every important move should sit inside a repeatable, inspectable **decision loop**, not be a one‑off reaction.
+every important move in a live, event‑driven environment should sit inside a repeatable, inspectable **decision loop**, not be a one‑off reaction.
 
 ---
 
@@ -147,8 +147,8 @@ This is how Athsany scales from one desk to a whole institution, or from one sys
 
 The **architecture** provides the technical rails: data, agents, tools, and integrations.  
 The **decision memory** provides the long‑term store of events, risks, strategies, executions, and reviews.  
-The **decision loop** is how everything moves:
+The **decision loop** is how everything moves, continuously.  
 
-> event → risk → strategy → execution → review → back into memory
+> event → risk → strategy → execution → review → back into memory  
 
-Together, they turn Athsany from a collection of models into an always‑on decision system.
+Together, they turn Athsany from a collection of models into an always‑on decision system and decision infrastructure.
