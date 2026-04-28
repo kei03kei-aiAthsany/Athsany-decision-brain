@@ -55,25 +55,26 @@ Finance is our most complete live demonstration, but the same architecture exten
 
 ## 3. Enterprise / Supply Chain
 
-**中文說明**  
-在企業與供應鏈場景，Athsany 把原本靠人臨場救火的決策，變成可以重複、可回看、可優化的決策系統，幫你記住每次斷供、延誤背後的事件與選擇。
+中文說明  
+在企業與供應鏈場景，Athsany 把原本高度依賴個人經驗、臨場判斷的決策，變成可以重複、可回顧、可優化的決策系統，幫你記住每次斷供、延誤背後的事件與選擇。
 
 **What Athsany sees**
 
 - Supplier status, logistics events, lead‑time changes  
 - Inventory levels, demand signals, pricing shifts  
-- External shocks: weather, geopolitics, regulation, infrastructure incidents
+- External shocks: weather, geopolitics, regulation, infrastructure incidents  
 
 **What the decision brain does**
 
 - Maps events into supply‑chain risk states (delay, shortage, concentration)  
 - Suggests mitigation strategies (re‑routing, re‑allocation, hedging, contract changes)  
-- Logs decisions and outcomes into decision memory for future disruptions
+- Logs decisions and outcomes into decision memory for future disruptions  
 
 **Why it matters**
 
-- Turns ad‑hoc firefighting into a repeatable decision infrastructure  
-- Helps enterprises learn how their operations actually behave under stress
+- Turns ad‑hoc firefighting and gut‑based responses into a repeatable decision infrastructure  
+- Helps enterprises learn how their operations actually behave under stress  
+- Makes hard‑won experience and intuition readable and reusable across teams and crises
 
 ---
 
