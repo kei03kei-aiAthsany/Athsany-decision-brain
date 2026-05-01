@@ -105,10 +105,10 @@ This allows the system to:
 
 Most high‑stakes decisions today still depend on experience and gut feeling that live in people’s heads, chats, and meetings, but are hard to see, audit, or reuse as a system.
 
-Athsany’s decision brain and decision memory are designed to **turn those tacit reactions into explicit, searchable decision history** – so that “how we usually handle this” becomes part of a readable, upgradeable decision infrastructure.[file:78]
+Athsany’s decision brain and decision memory are designed to **turn those tacit reactions into explicit, searchable decision history** – so that “how we usually handle this” becomes part of a readable, upgradeable decision infrastructure.
 
 **中文說明**  
-很多關鍵決策其實來自經驗與直覺，散落在人腦裡、聊天室裡、會議紀錄裡，很難被看見或重用。Athsany 要做的，就是把這些「感覺上的做法」變成可閱讀、可查閱、可優化的決策基建。[file:78]
+很多關鍵決策其實來自經驗與直覺，散落在人腦裡、聊天室裡、會議紀錄裡，很難被看見或重用。Athsany 要做的，就是把這些「感覺上的做法」變成可閱讀、可查閱、可優化的決策基建。
 
 ---
 
@@ -116,8 +116,8 @@ Athsany’s decision brain and decision memory are designed to **turn those taci
 
 Athsany 是一個聚焦 **決策支援與風險管理** 的多領域智能大腦，用於處理高不確定性場景：
 
-- 核心戰場：多資產金融市場（外匯、指數、黃金、期貨、原油、正股與衍生品）[file:78]  
-- 可延伸戰場：風險（保險、AML、房地產）與產業決策（供應鏈、能源、零售、企業營運、政策情景推演）等[file:78]
+- 核心戰場：多資產金融市場（外匯、指數、黃金、期貨、原油、正股與衍生品）
+- 可延伸戰場：風險（保險、AML、房地產）與產業決策（供應鏈、能源、零售、企業營運、政策情景推演）等
 
 同一般 Chat AI 不同，Athsany：
 
@@ -125,7 +125,7 @@ Athsany 是一個聚焦 **決策支援與風險管理** 的多領域智能大腦
 - 而係長期自己讀事件同數據，將複雜世界收斂成：
   - 可理解嘅 **事件結構**
   - 可執行嘅 **市場導航**
-  - 可累積嘅 **決策記憶**[file:78]
+  - 可累積嘅 **決策記憶**
 
 GitHub demo 主要展示嘅，是 Athsany 作為 **Decision Brain / decision cockpit** 點樣表達決策，而唔係完整交易系統。
 
@@ -202,7 +202,7 @@ Athsany Decision Engine
 
 ## 8. Prediction confidence / 預測信心層級（設計概念）
 
-為避免「語氣過硬但實際機率有限」，Athsany 的決策設計中引入 **信心層級** 概念，用嚟標記每個輸出嘅可靠度：[file:78]
+為避免「語氣過硬但實際機率有限」，Athsany 的決策設計中引入 **信心層級** 概念，用嚟標記每個輸出嘅可靠度：
 
 - **High confidence（高信心）**  
   - 類似事件喺相同 regime 下歷史命中率高、樣本充足  
@@ -253,7 +253,7 @@ _Current status (will be updated as the system evolves):_
 - ✅ Demo use‑cases on HSI futures and XAUUSD to validate the full loop  
 - 🚧 Building a more generalizable decision memory layer for non‑financial domains  
 - 🚧 Preparing public demos and documentation  
-- 🔭 Future: external API / SDK for integrating Athsany as a decision brain layer into other systems[file:78]
+- 🔭 Future: external API / SDK for integrating Athsany as a decision brain layer into other systems
 
 ---
 
