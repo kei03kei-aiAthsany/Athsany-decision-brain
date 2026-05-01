@@ -90,33 +90,51 @@ Every cycle is tracked, versioned, and linked to its originating events.
 Traditional tools focus on signals at a single point in time.  
 Athsany focuses on **decision memory**:
 
-- Logs every decision with its full context (events, risk view, chosen strategy).  
-- Tracks outcomes and deviations (what actually happened vs. what was expected).  
-- Stores post‑mortem reflections and corrections.  
-- Feeds these back into the next round of decisions for similar event patterns.
+- Logs every decision with its full context (events, risk view, chosen strategy)  
+- Tracks outcomes and deviations (what actually happened vs. what was expected)  
+- Stores post‑mortem reflections and corrections  
+- Feeds these back into the next round of decisions for similar event patterns
 
 This allows the system to:
 
-- Explain **why** a decision was made.  
-- Identify **where** it was wrong.  
-- Adjust **how** it responds next time, instead of repeating the same mistake.
+- Explain **why** a decision was made  
+- Identify **where** it was wrong  
+- Adjust **how** it responds next time, instead of repeating the same mistake
 
 ### From gut feeling to readable memory
 
 Most high‑stakes decisions today still depend on experience and gut feeling that live in people’s heads, chats, and meetings, but are hard to see, audit, or reuse as a system.
 
-Athsany’s decision brain and decision memory are designed to **turn those tacit reactions into explicit, searchable decision history** – so that “how we usually handle this” becomes part of a readable, upgradeable decision infrastructure.
+Athsany’s decision brain and decision memory are designed to **turn those tacit reactions into explicit, searchable decision history** — so that “how we usually handle this” becomes part of a readable, upgradeable decision infrastructure.
 
 **中文說明**  
 很多關鍵決策其實來自經驗與直覺，散落在人腦裡、聊天室裡、會議紀錄裡，很難被看見或重用。Athsany 要做的，就是把這些「感覺上的做法」變成可閱讀、可查閱、可優化的決策基建。
 
 ---
 
-## 5. Overview / 專案簡介
+## 5. Why Athsany cares about event cascades
+
+The world itself is not a straight line, and neither is a human life: from the moment you are born, you’re on a path of rises, falls, and sharp turns — some people ride a gentle slope, others a roller coaster.
+
+Events are not straight lines either. They don’t “happen and disappear”; they cascade through time and space, like tectonic plates shifting into an earthquake, then into a tsunami. Financial markets are simply the real‑time projection of these moving plates.
+
+Athsany aims to be a JARVIS‑grade decision brain: not just watching price ticks, but reading plate movements and event cascades, then helping you choose paths through these non‑linear worldlines that are less likely to blow up — and sometimes, let you shine.
+
+**中文說明**
+
+世界本身唔係一條直線，人生都唔係：由出世開始，每個人都喺一條有起有跌、有轉彎嘅軌跡上行，有人似慢車，有人似過山車。
+
+事件都一樣，佢唔係「發生完就完」，而係會喺時間同空間上一路級聯，好似板塊移動引發地震，再由震央拉出海嘯；金融市場只係呢啲板塊移動嘅即時投影。
+
+Athsany 想做嘅，其實就係一個 JARVIS 級嘅決策大腦：唔係淨係睇價位，而係睇板塊點郁、事件點級聯，幫你喺呢啲唔直線嘅世界線入面，揀一條唔咁易翻車、甚至可以大放異彩嘅路。
+
+---
+
+## 6. Overview / 專案簡介
 
 Athsany 是一個聚焦 **決策支援與風險管理** 的多領域智能大腦，用於處理高不確定性場景：
 
-- 核心戰場：多資產金融市場（外匯、指數、黃金、期貨、原油、正股與衍生品）
+- 核心戰場：多資產金融市場（外匯、指數、黃金、期貨、原油、正股與衍生品）  
 - 可延伸戰場：風險（保險、AML、房地產）與產業決策（供應鏈、能源、零售、企業營運、政策情景推演）等
 
 同一般 Chat AI 不同，Athsany：
@@ -131,7 +149,7 @@ GitHub demo 主要展示嘅，是 Athsany 作為 **Decision Brain / decision coc
 
 ---
 
-## 6. System view / 架構視角（high‑level）
+## 7. System view / 架構視角（high‑level）
 
 > 本節係 **目標系統視角**，方便理解 Athsany 屬於邊一類 decision infrastructure。  
 > 真實 production 架構與實盤細節仍屬內部資產，未在本 repo 完整公開。
@@ -178,12 +196,12 @@ Athsany Decision Engine
 
 ---
 
-## 7. Use cases / 應用場景
+## 8. Use cases / 應用場景
 
 目前 demo 主要用 HSI 同 XAUUSD 作為示例，用嚟展示：
 
-- 事件驅動視角 vs. 傳統裸 K 線 / 純粹技術分析  
-- 喺大型事件（例如中東衝突、美伊事件）下，點樣：
+- 事件驅動視角 vs. 傳統裸 K 線 / 純技術分析  
+- 喺大型事件下，點樣：
   - 由「有事件」變成「世界雷達」  
   - 睇清楚邊啲板塊受實質衝擊、資金可能流向邊度  
   - 區分真正被拉動嘅資產 vs. 短期噪音
@@ -200,7 +218,7 @@ Athsany Decision Engine
 
 ---
 
-## 8. Prediction confidence / 預測信心層級（設計概念）
+## 9. Prediction confidence / 預測信心層級（設計概念）
 
 為避免「語氣過硬但實際機率有限」，Athsany 的決策設計中引入 **信心層級** 概念，用嚟標記每個輸出嘅可靠度：
 
@@ -220,7 +238,7 @@ Athsany Decision Engine
 
 ---
 
-## 9. Why Finance First, But Not Finance Only
+## 10. Why Finance First, But Not Finance Only
 
 Financial markets (e.g. HSI futures, XAUUSD) are our most complete demonstration environment today, not the final scope of Athsany.
 
@@ -245,7 +263,20 @@ The same event → risk → strategy → execution → review pattern can be app
 
 ---
 
-## 10. Roadmap / Status & Future
+## 11. Market Context – Why a Decision Brain Layer Matters
+
+Predictive analytics, augmented analytics, and prediction markets already form a multi‑billion‑dollar space that is compounding towards the hundreds‑of‑billions. Most tools, however, still stop at **“more data and more charts”**.
+
+Athsany sits one layer above as the **decision brain** — turning signals into concrete actions and persistent decision memory. The goal is to lower the barrier so that more people and institutions can actually *use* predictions to decide, accelerating adoption and the growth of the entire market.
+
+**中文說明**
+
+而家預測分析、增強分析同預測市場，加埋已經係一個幾百億美金、向千億級走嘅市場，但好多系統都停喺「出數據、出圖表」。  
+Athsany 想做嘅係決策大腦，幫呢啲訊號變成具體行動同決策記憶，令更多人同機構真係用預測嚟做決定，推動成個市場增長得更快。
+
+---
+
+## 12. Roadmap / Status & Future
 
 _Current status (will be updated as the system evolves):_
 
@@ -257,7 +288,7 @@ _Current status (will be updated as the system evolves):_
 
 ---
 
-## 11. Repository Structure (current & planned)
+## 13. Repository Structure (current & planned)
 
 This repository is focused on **concepts and architecture**, not full production code (yet).
 
@@ -285,7 +316,7 @@ As the project evolves, this repo can grow into:
 
 ---
 
-## 12. Disclaimer / 免責聲明
+## 14. Disclaimer / 免責聲明
 
 This repository focuses on **architecture, concepts, and non‑sensitive components** of the Athsany system.
 
