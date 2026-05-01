@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>Athsany 決策大腦 v1 Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050711;
+      --bg-elevated: #0b1020;
+      --bg-soft: #111729;
+      --accent: #5bd5ff;
+      --accent-soft: rgba(91, 213, 255, 0.12);
+      --accent-strong: #ffb85b;
+      --text-main: #f5f7ff;
+      --text-sub: #a4acc4;
+      --border-soft: #1c2235;
+      --danger: #ff6b81;
+      --safe: #63d391;
+      --warning: #ffd66b;
+      --chip-bg: #161d33;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: radial-gradient(circle at top, #151a3a 0, #050711 55%);
+      color: var(--text-main);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 20px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: conic-gradient(
+        from 220deg,
+        #5bd5ff,
+        #ffb85b,
+        #9a6bff,
+        #5bd5ff
+      );
+      position: relative;
+      box-shadow: 0 0 22px rgba(91, 213, 255, 0.6);
+    }
+
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 7px;
+      background: radial-gradient(circle at 30% 10%, #13182e, #050711 70%);
+    }
+
+    .logo-text-main {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .logo-text-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(8, 12, 30, 0.9);
+      border-radius: 999px;
+      padding: 4px;
+      border: 1px solid rgba(70, 95, 150, 0.7);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+    }
+
+    .lang-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-sub);
+      padding: 0 4px;
+    }
+
+    .lang-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+      min-width: 52px;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, #5bd5ff, #ffb85b);
+      color: #02030a;
+      font-weight: 600;
+      box-shadow: 0 0 14px rgba(91, 213, 255, 0.6);
+    }
+
+    .lang-btn:not(.active):hover {
+      color: #e2e6ff;
+      background: rgba(81, 110, 190, 0.25);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 20px;
+      border-radius: var(--radius-lg);
+    }
+
+    .hero-main {
+      padding: 18px 20px 18px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(
+          135deg,
+          rgba(91, 213, 255, 0.16),
+          transparent 48%
+        ),
+        radial-gradient(circle at 12% 0, rgba(255, 184, 91, 0.22), transparent 60%),
+        linear-gradient(135deg, #080d22, #050713 70%, #080d22);
+      border: 1px solid rgba(91, 213, 255, 0.2);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 0, rgba(255, 184, 91, 0.13), transparent 70%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-main-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 3px 9px 3px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid rgba(111, 149, 255, 0.7);
+      background: rgba(15, 24, 70, 0.8);
+      color: #ccd5ff;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .glow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #5bd5ff;
+      box-shadow: 0 0 12px rgba(91, 213, 255, 1);
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      max-width: 560px;
+      margin-bottom: 16px;
+    }
+
+    .hero-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .hero-flow-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(8, 14, 40, 0.96);
+      border: 1px solid rgba(92, 120, 190, 0.9);
+      color: #d7e0ff;
+    }
+
+    .hero-flow-arrow {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(81, 110, 190, 0.6);
+      color: #c7d3ff;
+      background: rgba(7, 11, 32, 0.8);
+    }
+
+    .demo-note {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #9ea9d0;
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: rgba(2, 6, 24, 0.85);
+      border: 1px dashed rgba(80, 110, 190, 0.5);
+      max-width: 480px;
+    }
+
+    .hero-side {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 0 0, rgba(91, 213, 255, 0.18), transparent 55%),
+        linear-gradient(135deg, #070b1a, #050713 80%);
+      border: 1px solid rgba(64, 94, 182, 0.9);
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.85);
+    }
+
+    .hero-side-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .hero-side-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(12, 20, 55, 0.9);
+      border: 1px solid rgba(91, 213, 255, 0.5);
+      color: #cfe8ff;
+    }
+
+    .hero-side-body {
+      border-radius: 10px;
+      background: rgba(3, 6, 22, 0.95);
+      border: 1px solid rgba(38, 54, 106, 0.8);
+      padding: 10px 10px 8px;
+    }
+
+    .hero-kv-rows {
+      display: grid;
+      grid-template-columns: 1.1fr 1.1fr;
+      gap: 6px 8px;
+      margin-bottom: 6px;
+    }
+
+    .hero-kv {
+      font-size: 11px;
+    }
+
+    .hero-kv-label {
+      color: var(--text-sub);
+      margin-bottom: 2px;
+    }
+
+    .hero-kv-value {
+      color: #e9eeff;
+    }
+
+    .hero-heat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .hero-heat-label {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .hero-heat-bar {
+      flex: 1;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #63d391, #ffd66b, #ff6b81);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-heat-indicator {
+      position: absolute;
+      top: -2px;
+      width: 2px;
+      height: 11px;
+      border-radius: 999px;
+      background: #fdfdfd;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    }
+
+    .hero-heat-text {
+      font-size: 11px;
+      color: #ffd66b;
+      min-width: 62px;
+      text-align: right;
+    }
+
+    .hero-side-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-sub);
+      padding: 3px 2px 0;
+    }
+
+    .hero-side-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .hero-pill {
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(22, 29, 60, 0.95);
+      color: #c1ceff;
+      border: 1px solid rgba(63, 83, 156, 0.9);
+      font-size: 10px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 12px 12px 24px;
+      }
+      .hero-main {
+        padding: 14px 14px 14px;
+      }
+      .hero-title {
+        font-size: 21px;
+      }
+      .hero-subtitle {
+        font-size: 12px;
+      }
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      background: rgba(8, 10, 28, 0.98);
+      border: 1px solid var(--border-soft);
+      padding: 12px 14px 12px;
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      gap: 6px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .card-eye {
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 520px) {
+      .scenario-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .scenario-card {
+      border-radius: var(--radius-md);
+      padding: 10px 10px 9px;
+      background: linear-gradient(
+          135deg,
+          rgba(91, 213, 255, 0.18),
+          rgba(12, 16, 40, 0.95)
+        );
+      border: 1px solid rgba(91, 213, 255, 0.38);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scenario-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 110% 0, rgba(255, 184, 91, 0.14), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.18s ease-out;
+      pointer-events: none;
+    }
+
+    .scenario-card.inactive {
+      background: linear-gradient(
+          135deg,
+          rgba(36, 45, 92, 0.36),
+          rgba(8, 10, 24, 0.95)
+        );
+      border-color: rgba(43, 55, 104, 0.9);
+      box-shadow: none;
+      opacity: 0.78;
+    }
+
+    .scenario-card.inactive::after {
+      opacity: 0;
+    }
+
+    .scenario-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.9);
+    }
+
+    .scenario-card.inactive:hover::after {
+      opacity: 0.4;
+    }
+
+    .scenario-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .scenario-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .scenario-asset {
+      font-size: 11px;
+      color: #9fbcff;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(130, 159, 255, 0.8);
+      background: rgba(9, 14, 38, 0.95);
+    }
+
+    .scenario-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 4px;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .scenario-meta-chip {
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(4, 8, 30, 0.96);
+      border: 1px solid rgba(48, 68, 125, 0.9);
+      color: #c7d0ff;
+    }
+
+    .scenario-description {
+      font-size: 11px;
+      color: #cfd8ff;
+      line-height: 1.5;
+    }
+
+    .scenario-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .scenario-signal {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+    }
+
+    .dot-long {
+      background: #63d391;
+    }
+
+    .dot-short {
+      background: #ff6b81;
+    }
+
+    .dot-neutral {
+      background: #ffd66b;
+    }
+
+    .event-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .event-flow {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .event-pill {
+      border-radius: var(--radius-md);
+      padding: 8px 9px 7px;
+      background: radial-gradient(circle at 0 0, rgba(91, 213, 255, 0.16), transparent 60%),
+        rgba(7, 11, 30, 0.98);
+      border: 1px solid rgba(68, 96, 170, 0.9);
+    }
+
+    .event-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-sub);
+      margin-bottom: 3px;
+    }
+
+    .event-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .event-body {
+      font-size: 11px;
+      color: #cfd5ff;
+      line-height: 1.5;
+    }
+
+    .decision-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 820px) {
+      .decision-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .decision-core {
+      border-radius: var(--radius-md);
+      padding: 9px 10px 8px;
+      background: radial-gradient(circle at 0 0, rgba(99, 211, 145, 0.2), transparent 60%),
+        rgba(5, 9, 26, 0.98);
+      border: 1px solid rgba(70, 115, 76, 0.95);
+    }
+
+    .decision-row {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 8px;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .decision-label {
+      color: var(--text-sub);
+    }
+
+    .decision-value {
+      color: #e7f5ff;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(5, 20, 16, 0.96);
+      border: 1px solid rgba(88, 164, 115, 0.95);
+      color: #9ce7b9;
+    }
+
+    .badge-pill.dangerous {
+      background: rgba(34, 8, 12, 0.96);
+      border-color: rgba(255, 107, 129, 0.95);
+      color: #ffb7c3;
+    }
+
+    .badge-pill.neutral {
+      background: rgba(31, 23, 6, 0.96);
+      border-color: rgba(255, 214, 107, 0.95);
+      color: #ffe5a9;
+    }
+
+    .confidence-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .confidence-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #283450, #63d391);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .confidence-pointer {
+      position: absolute;
+      top: -2px;
+      width: 2px;
+      height: 10px;
+      border-radius: 999px;
+      background: #f6f9ff;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+    }
+
+    .confidence-text {
+      font-size: 10px;
+      color: #b9e9c7;
+      min-width: 44px;
+    }
+
+    .decision-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-radius: var(--radius-md);
+      padding: 9px 10px 7px;
+      background: rgba(7, 11, 30, 0.98);
+      border: 1px solid rgba(48, 68, 125, 0.95);
+      font-size: 11px;
+    }
+
+    .decision-actions-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .action-label {
+      color: var(--text-sub);
+    }
+
+    .action-value {
+      color: #e2ebff;
+    }
+
+    .action-cta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .decision-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 12px;
+      font-size: 11px;
+      cursor: pointer;
+      background: rgba(13, 21, 52, 0.96);
+      border: 1px solid rgba(80, 115, 211, 0.95);
+      color: #dfe7ff;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.16s ease-out;
+    }
+
+    .decision-btn:hover {
+      background: linear-gradient(135deg, #5bd5ff, #ffb85b);
+      color: #02030a;
+      box-shadow: 0 0 16px rgba(91, 213, 255, 0.7);
+    }
+
+    .action-hint {
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .memory-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.05fr);
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    @media (max-width: 720px) {
+      .memory-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .memory-item {
+      border-radius: var(--radius-md);
+      padding: 8px 9px 8px;
+      background: radial-gradient(circle at 0 0, rgba(154, 107, 255, 0.18), transparent 60%),
+        rgba(8, 9, 30, 0.98);
+      border: 1px solid rgba(86, 73, 176, 0.95);
+    }
+
+    .memory-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      gap: 4px;
+    }
+
+    .memory-title {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .memory-tag {
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(22, 20, 49, 0.96);
+      border: 1px solid rgba(135, 124, 250, 0.95);
+      color: #d6d0ff;
+      font-size: 10px;
+    }
+
+    .memory-row {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .memory-label {
+      color: var(--text-sub);
+    }
+
+    .memory-value {
+      color: #e3ddff;
+    }
+
+    .memory-diff {
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(118, 104, 210, 0.9);
+      color: #c3baff;
+      font-size: 10px;
+    }
+
+    .memory-diff strong {
+      color: #f6edff;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .pill {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(11, 14, 38, 0.96);
+      border: 1px solid rgba(60, 72, 138, 0.95);
+      color: #ced6ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <header>
+        <div class="logo">
+          <div class="logo-mark"></div>
+          <div>
+            <div class="logo-text-main" data-i18n="brandTitle">
+              Athsany Decision Brain v1
+            </div>
+            <div class="logo-text-sub" data-i18n="brandSubtitle">
+              Event cascade–aware market decision cockpit
+            </div>
+          </div>
+        </div>
+        <div class="lang-toggle">
+          <span class="lang-label" data-i18n="langLabel">Language</span>
+          <button class="lang-btn active" data-lang="zh">中文</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-main">
+            <div class="hero-main-content">
+              <div class="badge-row">
+                <div class="badge">
+                  <span class="glow-dot"></span>
+                  <span data-i18n="badgePrototype">Early Prototype · Not live trading</span>
+                </div>
+                <div class="badge" style="border-color: rgba(255,184,91,0.9); background: rgba(34,21,4,0.9); color:#ffe2b3;">
+                  <span data-i18n="badgeFocus">Scenario → Cascade → Decision → Memory</span>
+                </div>
+              </div>
+              <h1 class="hero-title" data-i18n="heroTitle">
+                Athsany 決策大腦 v1 · 事件級聯交易視角
+              </h1>
+              <p class="hero-subtitle" data-i18n="heroSubtitle">
+                這是一個早期 decision cockpit prototype，用「情景 → 事件級聯 → 決策輸出 → 決策記憶」呈現
+                HSI 與 XAUUSD 在關鍵事件下的板塊移動視角，而不是一般線性 K 線圖。
+              </p>
+              <div class="hero-flow">
+                <div class="hero-flow-step" data-i18n="flowScenario">
+                  情景 Scenario
+                </div>
+                <div class="hero-flow-arrow">⟶</div>
+                <div class="hero-flow-step" data-i18n="flowCascade">
+                  事件級聯 Event Cascade
+                </div>
+                <div class="hero-flow-arrow">⟶</div>
+                <div class="hero-flow-step" data-i18n="flowDecision">
+                  決策輸出 Decision
+                </div>
+                <div class="hero-flow-arrow">⟶</div>
+                <div class="hero-flow-step" data-i18n="flowMemory">
+                  決策記憶 Memory
+                </div>
+              </div>
+              <div class="hero-tags">
+                <span class="tag" data-i18n="tagHSI">HSI · 事件驅動波動</span>
+                <span class="tag" data-i18n="tagXAU">XAUUSD · 通脹與避險流</span>
+                <span class="tag" data-i18n="tagView">
+                  Non-linear world · Multi‑order impacts
+                </span>
+              </div>
+              <div class="demo-note" data-i18n="demoNote">
+                這只是 Athsany 決策大脈絡的早期 demo，用靜態情景模擬部分核心流程，並不代表最終產品，也不構成任何投資建議。
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-side">
+            <div>
+              <div class="hero-side-header">
+                <div class="hero-side-title" data-i18n="heroSideTitle">
+                  当前情景 Live Scenario Snapshot
+                </div>
+                <div class="chip" data-i18n="heroSideChip">
+                  Prototype · Synthetic signals
+                </div>
+              </div>
+              <div class="hero-side-body">
+                <div class="hero-kv-rows">
+                  <div class="hero-kv">
+                    <div class="hero-kv-label" data-i18n="heroAssetLabel">
+                      Asset
+                    </div>
+                    <div class="hero-kv-value" id="heroAsset">
+                      HSI Index Futures
+                    </div>
+                  </div>
+                  <div class="hero-kv">
+                    <div class="hero-kv-label" data-i18n="heroRegimeLabel">
+                      Regime
+                    </div>
+                    <div class="hero-kv-value" id="heroRegime">
+                      High volatility breakout
+                    </div>
+                  </div>
+                  <div class="hero-kv">
+                    <div class="hero-kv-label" data-i18n="heroStanceLabel">
+                      Market stance
+                    </div>
+                    <div class="hero-kv-value" id="heroStance">
+                      Tactical long with tight risk
+                    </div>
+                  </div>
+                  <div class="hero-kv">
+                    <div class="hero-kv-label" data-i18n="heroHorizonLabel">
+                      Time horizon
+                    </div>
+                    <div class="hero-kv-value" id="heroHorizon">
+                      Intraday · 1–3 hours
+                    </div>
+                  </div>
+                </div>
+                <div class="hero-heat">
+                  <div class="hero-heat-label" data-i18n="heroHeatLabel">
+                    Event cascade intensity
+                  </div>
+                  <div class="hero-heat-bar">
+                    <div class="hero-heat-indicator" id="heroHeatIndicator" style="left: 68%;"></div>
+                  </div>
+                  <div class="hero-heat-text" id="heroHeatText">
+                    Elevated
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hero-side-footer">
+              <div data-i18n="heroFooterLeft">
+                Synthetic backtest memory · 2 analogues
+              </div>
+              <div class="hero-side-pills">
+                <span class="hero-pill" data-i18n="heroFooterPill1">
+                  No live orders
+                </span>
+                <span class="hero-pill" data-i18n="heroFooterPill2">
+                  For narrative exploration only
+                </span>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="layout">
+          <div class="column">
+            <!-- Scenario Selector -->
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title" data-i18n="scenarioTitle">
+                    情景選擇 Scenario Selector
+                  </div>
+                  <div class="card-subtitle" data-i18n="scenarioSubtitle">
+                    選擇一個情景，觀察事件如何級聯，並推導出 Athsany 的市場立場與決策記憶。
+                  </div>
+                </div>
+                <div class="card-eye" data-i18n="scenarioHint">
+                  4 preset scenarios · HSI &amp; XAUUSD
+                </div>
+              </div>
+              <div class="scenario-grid" id="scenarioGrid">
+                <!-- Cards will be injected by JS -->
+              </div>
+            </article>
+
+            <!-- Event Cascade -->
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title" data-i18n="cascadeTitle">
+                    事件級聯 Event Cascade
+                  </div>
+                  <div class="card-subtitle" data-i18n="cascadeSubtitle">
+                    從觸發事件到第一層、第二層影響，讓市場視角從「點」變成「結構」。
+                  </div>
+                </div>
+                <div class="card-eye" data-i18n="cascadeHint">
+                  Trigger → First-order → Second-order
+                </div>
+              </div>
+              <div class="event-flow">
+                <div class="event-pill">
+                  <div class="event-label" data-i18n="triggerLabel">
+                    Trigger
+                  </div>
+                  <div class="event-title" id="triggerTitle">
+                    Opening gap with macro news
+                  </div>
+                  <div class="event-body" id="triggerBody">
+                    HSI 在早盤受到隔夜美股高波動帶動，開盤即跳空越過前日波動區間，同時期指成交放大。
+                  </div>
+                </div>
+                <div class="event-pill">
+                  <div class="event-label" data-i18n="firstOrderLabel">
+                    First-order impact
+                  </div>
+                  <div class="event-title" id="firstOrderTitle">
+                    Liquidity pockets and stop runs
+                  </div>
+                  <div class="event-body" id="firstOrderBody">
+                    高槓桿短線倉位被迫平倉，短時間內出現連環止損與追價單，推動價格加速突破近期波動上沿。
+                  </div>
+                </div>
+                <div class="event-pill">
+                  <div class="event-label" data-i18n="secondOrderLabel">
+                    Second-order impact
+                  </div>
+                  <div class="event-title" id="secondOrderTitle">
+                    Volatility re-pricing and regime shift
+                  </div>
+                  <div class="event-body" id="secondOrderBody">
+                    隱含波動率被重新定價，日內做市商調整對沖節奏，短期內市場從「區間盤整」轉向「突破追隨」的 regime。
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="column">
+            <!-- Athsany Decision -->
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title" data-i18n="decisionTitle">
+                    Athsany 決策輸出 Decision Output
+                  </div>
+                  <div class="card-subtitle" data-i18n="decisionSubtitle">
+                    將事件級聯轉成可執行的市場立場、信心與風險姿態，而不是單一價格預測。
+                  </div>
+                </div>
+                <div class="card-eye" data-i18n="decisionHint">
+                  Stance · Confidence · Action · Risk posture
+                </div>
+              </div>
+              <div class="decision-layout">
+                <div class="decision-core">
+                  <div class="decision-row">
+                    <div class="decision-label" data-i18n="stanceLabel">
+                      市場立場 Market stance
+                    </div>
+                    <div class="decision-value" id="decisionStance">
+                      偏多（短線突破順勢），但視為 regime 切換初期，避免追高。
+                    </div>
+                  </div>
+                  <div class="decision-row">
+                    <div class="decision-label" data-i18n="confidenceLabel">
+                      信心描述 Confidence
+                    </div>
+                    <div class="decision-value">
+                      <div class="confidence-bar">
+                        <div class="confidence-track">
+                          <div class="confidence-pointer" id="confidencePointer" style="left: 72%;"></div>
+                        </div>
+                        <div class="confidence-text" id="confidenceText">
+                          High
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="decision-row">
+                    <div class="decision-label" data-i18n="riskLabel">
+                      風險姿態 Risk posture
+                    </div>
+                    <div class="decision-value">
+                      <span class="badge-pill" id="riskBadge">
+                        控制風險，允許 intraday drawdown 在可承受範圍內。
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="decision-actions">
+                  <div class="decision-actions-row">
+                    <div>
+                      <div class="action-label" data-i18n="actionLabel">
+                        建議操作 Suggested action
+                      </div>
+                      <div class="action-value" id="decisionAction">
+                        逢回分批建立短線多單，止損放在突破區間下方，並使用部分部位作為動量追蹤。
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pill-row" id="decisionPills">
+                    <!-- small pills filled by JS -->
+                  </div>
+                  <div class="action-cta-row">
+                    <button class="decision-btn" type="button">
+                      <span data-i18n="ctaSimulate">Simulate P&amp;L path</span>
+                      <span>⟶</span>
+                    </button>
+                    <div class="action-hint" data-i18n="ctaHint">
+                      僅為敘事 demo，不會觸發真實下單或連線到交易系統。
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Decision Memory -->
+            <article class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title" data-i18n="memoryTitle">
+                    決策記憶 Decision Memory
+                  </div>
+                  <div class="card-subtitle" data-i18n="memorySubtitle">
+                    追蹤與當前情景相似的歷史案例，對照當時事件、決策與結果，標示這次有何不同。
+                  </div>
+                </div>
+                <div class="card-eye" data-i18n="memoryHint">
+                  1–2 historical analogues per scenario
+                </div>
+              </div>
+              <div class="memory-list" id="memoryList">
+                <!-- memory items injected by JS -->
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const scenarios = [
+      {
+        id: "hsi_breakout",
+        asset: {
+          zh: "HSI 期指",
+          en: "HSI Index Futures"
+        },
+        regime: {
+          zh: "高波動突破日",
+          en: "High volatility breakout"
+        },
+        flowHeat: { position: 0.68, text: { zh: "波動升溫", en: "Elevated" } },
+        heroStance: {
+          zh: "短線偏多 · 突破順勢，嚴控風險",
+          en: "Tactical long breakout with tight risk"
+        },
+        heroHorizon: {
+          zh: "日內 · 1–3 小時",
+          en: "Intraday · 1–3 hours"
+        },
+        scenarioName: {
+          zh: "HSI 高波動突破日",
+          en: "HSI high‑volatility breakout day"
+        },
+        scenarioMeta: {
+          zh: ["日內", "事件驅動", "波動率再定價"],
+          en: ["Intraday", "Event‑driven", "Vol re‑pricing"]
+        },
+        scenarioSignal: {
+          type: "long",
+          zh: "偏多 stance",
+          en: "Tilted long"
+        },
+        scenarioDescription: {
+          zh: "隔夜外圍大幅震盪，HSI 早盤跳空站上前期密集成交區，短線量能放大，期指與現貨基差快速拉闊。",
+          en: "Overnight global indices swing sharply, HSI gaps above prior high‑volume zone at the open. Intraday volume spikes as futures‑cash basis widens quickly."
+        },
+        cascade: {
+          triggerTitle: {
+            zh: "外圍共振帶動早盤技術突破",
+            en: "Global risk‑on driving technical gap breakout"
+          },
+          triggerBody: {
+            zh: "美股及區內股市隔夜共振上漲，帶動 HSI 早盤跳空突破前期整理區間，上方幾乎沒有近期成交堆疊。",
+            en: "US and regional indices rally overnight, pulling HSI into a gap‑up open above the prior consolidation band, with little recent traded volume overhead."
+          },
+          firstOrderTitle: {
+            zh: "短倉止損與追價單疊加",
+            en: "Short covering and momentum chasing collide"
+          },
+          firstOrderBody: {
+            zh: "前一日累積的短倉被迫平倉，算法單與 CTA 模型同步觸發追價買盤，導致早盤成交極度集中在突破區域。",
+            en: "Short positions built in the prior session are squeezed, while algo and CTA models flip long, concentrating heavy flow around the breakout zone."
+          },
+          secondOrderTitle: {
+            zh: "波動 regime 切換與做市調整",
+            en: "Volatility regime shift and market‑making adjustment"
+          },
+          secondOrderBody: {
+            zh: "做市商上調隱含波動與對沖節奏，期權 skew 結構改變，短時間內市場從「區間思維」轉向「趨勢思維」。",
+            en: "Market makers re‑price implied vol and hedge cadence, option skew reshapes, and the market mindset tilts from range‑bound to trend‑following."
+          }
+        },
+        decision: {
+          stance: {
+            zh: "偏多（短線突破順勢），視為 regime 切換初期，避免在情緒尾段追高。",
+            en: "Tactical long breakout, treating this as early regime shift while avoiding late‑stage emotional chasing."
+          },
+          confidence: { level: 0.72, text: { zh: "偏高", en: "High" } },
+          riskBadge: {
+            type: "neutral",
+            zh: "允許有限 intraday drawdown，以倉位分層管理風險。",
+            en: "Accept moderate intraday drawdown, manage risk via layered position sizing."
+          },
+          action: {
+            zh: "在前一日壓力位上方逢回分批加多，止損設在缺口下緣；一部分倉位採用追蹤止盈鎖定趨勢延伸。",
+            en: "Scale into longs on pullbacks above prior resistance, set stops below the gap; allocate a slice to trailing‑stop logic to capture extended trend."
+          },
+          pills: {
+            zh: [
+              "避免在 1 分鐘追高",
+              "重視成交密集區的回踩",
+              "以波動率而非點數控風險"
+            ],
+            en: [
+              "Avoid 1‑minute emotional chasing",
+              "Respect pullbacks to high‑volume nodes",
+              "Size risk in volatility, not raw points"
+            ]
+          }
+        },
+        memory: [
+          {
+            title: { zh: "2023 年 某次指數跳空突破", en: "2023 index gap‑up breakout" },
+            tag: { zh: "日內短多", en: "Intraday tactical long" },
+            event: {
+              zh: "早盤受美股單邊上漲帶動，指數跳空越過三日高點。",
+              en: "Index opened with a gap above a 3‑day high after a one‑sided US rally."
+            },
+            decision: {
+              zh: "採取逢回加倉的短線多頭策略，嚴控缺口下緣止損。",
+              en: "Used buy‑the‑dip long strategy with stops tightly anchored below the gap."
+            },
+            result: {
+              zh: "當日順利延伸，收盤前出現一次急殺但未跌破關鍵位，策略表現正收益。",
+              en: "Price extended higher with one sharp intraday flush that held key levels, strategy ended the day positive."
+            },
+            diff: {
+              zh: "本次波動率與期權 skew 水平較高，表示市場對後續不確定性定價更敏感，需要更快的減倉節奏。",
+              en: "Current vol and option skew are higher, signalling more sensitive uncertainty pricing and calling for faster de‑risking cadence."
+            }
+          },
+          {
+            title: { zh: "2020 年 疫情後技術反彈", en: "2020 post‑pandemic technical rebound" },
+            tag: { zh: "結構性風險仍在", en: "Structural risk in background" },
+            event: {
+              zh: "疫情恐慌後出現強勁反彈，指數日內高波動。",
+              en: "After pandemic panic, a strong reflex rally in the index with extreme intraday swings."
+            },
+            decision: {
+              zh: "控制槓桿，僅使用部分資本參與反彈行情。",
+              en: "Capped leverage, only partial capital participated in the rebound."
+            },
+            result: {
+              zh: "雖然反彈延續，但中途多次出現深度回撤，保守槓桿避免了非必要的極端波動。",
+              en: "Rally extended but featured deep drawdowns; conservative leverage avoided unnecessary stress."
+            },
+            diff: {
+              zh: "當時是宏觀黑天鵝尾段，本次則較偏技術性 regime 切換，系統可接受更高的事件風險預算。",
+              en: "Back then macro tail‑risk dominated; now the setup is more technical, allowing for a slightly higher event‑risk budget."
+            }
+          }
+        ]
+      },
+      {
+        id: "hsi_rates",
+        asset: {
+          zh: "HSI 期指",
+          en: "HSI Index Futures"
+        },
+        regime: {
+          zh: "受外圍利率衝擊",
+          en: "Under external rates shock"
+        },
+        flowHeat: { position: 0.61, text: { zh: "壓力升溫", en: "Stressed" } },
+        heroStance: {
+          zh: "結構偏空 · 反彈視為減倉窗口",
+          en: "Structurally cautious · Use bounces to de‑risk"
+        },
+        heroHorizon: {
+          zh: "多日 · 2–10 交易日",
+          en: "Multi‑session · 2–10 trading days"
+        },
+        scenarioName: {
+          zh: "HSI 受外圍利率衝擊",
+          en: "HSI hit by global rates shock"
+        },
+        scenarioMeta: {
+          zh: ["多日", "宏觀利率", "風險偏好收縮"],
+          en: ["Multi‑session", "Macro rates", "Risk‑off compression"]
+        },
+        scenarioSignal: {
+          type: "short",
+          zh: "偏空 stance",
+          en: "Tilted short"
+        },
+        scenarioDescription: {
+          zh: "美債收益率意外跳升，引發全球風險資產評價重定價，資金從高貝塔市場撤出，HSI 在弱反彈後再度回落。",
+          en: "US yields surprise to the upside, forcing repricing across risk assets. Capital exits high‑beta markets, HSI fades after shallow bounces."
+        },
+        cascade: {
+          triggerTitle: {
+            zh: "利率意外與點陣圖重定價",
+            en: "Rates surprise and dot‑plot repricing"
+          },
+          triggerBody: {
+            zh: "最新 FOMC 指引暗示利率維持高位更久，市場對未來降息預期大幅後移，美債殖利率急升。",
+            en: "Fresh FOMC guidance points to higher‑for‑longer rates, pushing out rate‑cut expectations and driving a sharp rise in US yields."
+          },
+          firstOrderTitle: {
+            zh: "估值壓縮與風險資產修正",
+            en: "Valuation compression and risk‑asset adjustment"
+          },
+          firstOrderBody: {
+            zh: "高估值與高槓桿板塊出現同步賣壓，新興市場與高貝塔指數面臨被動賣出與資金流出。",
+            en: "Highly valued and levered segments come under pressure, with EM and high‑beta indices hit by passive selling and outflows."
+          },
+          secondOrderTitle: {
+            zh: "風險偏好 regime 轉弱",
+            en: "Risk‑appetite regime weakens"
+          },
+          secondOrderBody: {
+            zh: "風險偏好從「逢低承接」轉向「反彈減倉」，投資人更關注利率上行對盈餘折現與信用利差的次級影響。",
+            en: "Risk appetite shifts from 'buy the dip' to 'sell into strength', with focus turning to how higher rates compress earnings multiples and widen spreads."
+          }
+        },
+        decision: {
+          stance: {
+            zh: "偏空與防守，將反彈視為減倉與重新配置的窗口，而非積極加碼風險資產。",
+            en: "Defensive and mildly short‑biased, treating rallies as windows to reduce risk and rotate instead of adding exposure."
+          },
+          confidence: { level: 0.66, text: { zh: "中高", en: "Moderately high" } },
+          riskBadge: {
+            type: "dangerous",
+            zh: "重視尾部風險與流動性真空，避免過度單向槓桿。",
+            en: "Watch tail risk and liquidity air‑pockets, avoid uni‑directional leverage."
+          },
+          action: {
+            zh: "逢反彈逐步減持高貝塔與利率敏感板塊，保留部分防守性部位，同時維持適度避險倉位。",
+            en: "Use rebounds to trim high‑beta and rate‑sensitive exposure, keep defensives and maintain a modest hedge overlay."
+          },
+          pills: {
+            zh: [
+              "避免在下殺尾段追空",
+              "關注利率與信貸利差節奏",
+              "以風險預算而非點位思考出場"
+            ],
+            en: [
+              "Avoid shorting into capitulation",
+              "Track rates and credit spread tempo",
+              "Exit on risk‑budget, not arbitrary levels"
+            ]
+          }
+        },
+        memory: [
+          {
+            title: { zh: "2018 年 美債收益率上行期", en: "2018 US yield up‑cycle" },
+            tag: { zh: "估值壓縮期", en: "Valuation compression phase" },
+            event: {
+              zh: "美債殖利率持續攀升，新興市場與高貝塔股指承壓。",
+              en: "US yields grind higher, pressuring EM and high‑beta equity indices."
+            },
+            decision: {
+              zh: "早期即減碼高估值板塊，增加防守性與現金比重。",
+              en: "Reduced high‑valuation segments early, added defensives and cash."
+            },
+            result: {
+              zh: "市場經歷多輪震盪下修，保守配置有效降低回撤。",
+              en: "Markets experienced multiple corrective swings; defensive stance mitigated drawdowns."
+            },
+            diff: {
+              zh: "當時通脹與政策溝通更可預期，本次訊號噪音更大，需更重視情緒與流動性節點。",
+              en: "Inflation and policy communication were more predictable then; current signals are noisier, requiring closer watch on sentiment and liquidity nodes."
+            }
+          },
+          {
+            title: { zh: "2022 年 初期升息循環", en: "2022 early‑cycle hikes" },
+            tag: { zh: "政策轉向期", en: "Policy inflection regime" },
+            event: {
+              zh: "央行結束寬鬆，市場從流動性驅動轉向盈利與利率敏感度驅動。",
+              en: "Central banks pivot away from easy policy, shifting drivers from liquidity to earnings and rate sensitivity."
+            },
+            decision: {
+              zh: "降低成長股權重，增加現金流穩定與高股息部位。",
+              en: "Cut growth exposure, raised allocations to stable cash‑flow and dividend assets."
+            },
+            result: {
+              zh: "成長股波動劇烈且回撤深，防守型配置相對穩定。",
+              en: "Growth assets saw sharp and deep drawdowns; defensive mix proved more stable."
+            },
+            diff: {
+              zh: "目前估值起點較低，市場對利率上行的承受度略佳，但資金流仍對意外變化敏感。",
+              en: "Current valuations start from lower levels, making markets more tolerant to rate moves, yet flows remain sensitive to surprises."
+            }
+          }
+        ]
+      },
+      {
+        id: "xau_cpi",
+        asset: {
+          zh: "XAUUSD 現貨黃金",
+          en: "XAUUSD Spot Gold"
+        },
+        regime: {
+          zh: "通脹數據急升",
+          en: "Inflation data upside surprise"
+        },
+        flowHeat: { position: 0.74, text: { zh: "避險升溫", en: "Risk‑hedging spike" } },
+        heroStance: {
+          zh: "偏多 · 把握通脹驚喜帶來的避險流，但警惕利率反應。",
+          en: "Constructive long · Ride inflation‑driven hedging flows but watch rate reaction."
+        },
+        heroHorizon: {
+          zh: "數日到數週",
+          en: "Multi‑day to multi‑week"
+        },
+        scenarioName: {
+          zh: "XAUUSD 通脹數據急升",
+          en: "XAUUSD on inflation upside surprise"
+        },
+        scenarioMeta: {
+          zh: ["通脹驚喜", "避險需求", "實質利率走勢"],
+          en: ["Inflation surprise", "Hedging demand", "Real‑rates path"]
+        },
+        scenarioSignal: {
+          type: "long",
+          zh: "偏多 stance",
+          en: "Tilted long"
+        },
+        scenarioDescription: {
+          zh: "最新通脹數據大幅高於預期，市場重新評估實質利率路徑，黃金作為通脹與制度避險工具的需求升溫。",
+          en: "Latest inflation print overshoots expectations, forcing a reassessment of real‑rates path and boosting demand for gold as an inflation and regime hedge."
+        },
+        cascade: {
+          triggerTitle: {
+            zh: "通脹數據大幅高於預期",
+            en: "Inflation print meaningfully above consensus"
+          },
+          triggerBody: {
+            zh: "核心與總體通脹同時超預期，市場開始質疑通脹下行速度與政策可信度。",
+            en: "Both core and headline inflation exceed expectations, prompting doubts over the disinflation pace and policy credibility."
+          },
+          firstOrderTitle: {
+            zh: "實質利率與名目利率預期重定價",
+            en: "Real‑rates and nominal paths repriced"
+          },
+          firstOrderBody: {
+            zh: "名目利率雖可能上行，但如果通脹風險溢價上升更快，實質利率下行空間重新被打開。",
+            en: "Nominal yields may rise, yet if inflation risk premium climbs faster, the door reopens for lower real rates."
+          },
+          secondOrderTitle: {
+            zh: "避險與制度信任的再平衡",
+            en: "Hedging and regime‑trust rebalancing"
+          },
+          secondOrderBody: {
+            zh: "資金重新考慮黃金作為通脹與制度不確定性的長期對沖工具，配置需求上升而非單純短線交易。",
+            en: "Investors reassess gold as a hedge against both inflation and institutional uncertainty, driving allocation demand beyond short‑term trading flows."
+          }
+        },
+        decision: {
+          stance: {
+            zh: "偏多，視通脹驚喜為黃金配置需求的催化，而非僅是交易性波動。",
+            en: "Constructively long, treating the inflation surprise as a catalyst for allocation demand rather than a purely tactical spike."
+          },
+          confidence: { level: 0.69, text: { zh: "偏高", en: "High" } },
+          riskBadge: {
+            type: "safe",
+            zh: "倉位漸進建立，預留空間應對利率與美元反向波動。",
+            en: "Build exposure gradually, leaving room to absorb rate and dollar swings."
+          },
+          action: {
+            zh: "分層建立多頭部位，利用回調加碼，並以實質利率走勢作為中線風險錨點。",
+            en: "Scale into longs on pullbacks, adding on dips, with real‑rates trajectory as the anchor for medium‑term risk."
+          },
+          pills: {
+            zh: [
+              "留意利率與美元短線脈衝",
+              "區分配置需求與投機倉",
+              "可搭配期權對沖尾部風險"
+            ],
+            en: [
+              "Watch short‑term rate and dollar spikes",
+              "Separate allocation flows from speculative flows",
+              "Use options to frame tail‑risk"
+            ]
+          }
+        },
+        memory: [
+          {
+            title: { zh: "2020–2021 通脹重定價段", en: "2020–2021 inflation repricing phase" },
+            tag: { zh: "通脹交易起點", en: "Inflation trade onset" },
+            event: {
+              zh: "疫情後期通脹逐步抬頭，市場開始構建通脹交易。",
+              en: "Inflation edges higher post‑pandemic, kick‑starting the inflation trade."
+            },
+            decision: {
+              zh: "黃金與通脹債券同步納入配置組合，降低純股票曝險。",
+              en: "Added gold and inflation‑linked bonds, trimming pure equity beta."
+            },
+            result: {
+              zh: "通脹再定價期間，避險資產對沖了部分股債同步回撤。",
+              en: "During inflation repricing, hedges offset part of the equity‑bond drawdown."
+            },
+            diff: {
+              zh: "當時通脹起點較低，本次屬於高通脹下的再驚喜，市場容忍度更低，訊噪比更高。",
+              en: "Inflation started from lower levels then; current surprise lands on already elevated inflation, with lower tolerance and a noisier tape."
+            }
+          },
+          {
+            title: { zh: "2011 年 危機後黃金高位震盪", en: "2011 post‑crisis gold plateau" },
+            tag: { zh: "情緒擠兌尾段", en: "Late‑stage sentiment squeeze" },
+            event: {
+              zh: "危機後黃金快速拉升後轉為高位震盪，情緒擠兌成為主導。",
+              en: "Gold surged post‑crisis then shifted into a volatile plateau dominated by sentiment."
+            },
+            decision: {
+              zh: "不在情緒尾段追價，改以逢高減倉鎖定利潤。",
+              en: "Avoided chasing the sentiment tail, sold into strength to lock gains."
+            },
+            result: {
+              zh: "隨後黃金進入長期調整，早期減倉避免了大幅回吐。",
+              en: "Gold later entered a prolonged correction; early de‑risking reduced give‑back."
+            },
+            diff: {
+              zh: "本次通脹驚喜出現在較早期，尚未進入極端情緒尾段，仍有空間構建有紀律的多頭部位。",
+              en: "Current setup occurs earlier in the cycle, ahead of euphoric extremes, leaving room for disciplined long construction."
+            }
+          }
+        ]
+      },
+      {
+        id: "xau_geopolitics",
+        asset: {
+          zh: "XAUUSD 現貨黃金",
+          en: "XAUUSD Spot Gold"
+        },
+        regime: {
+          zh: "地緣事件後跳空",
+          en: "Post‑geopolitical gap move"
+        },
+        flowHeat: { position: 0.79, text: { zh: "避險急凍", en: "Acute hedging stress" } },
+        heroStance: {
+          zh: "短線謹慎 · 中線偏多，分開處理情緒與結構。",
+          en: "Short‑term cautious · Medium‑term constructive, separating noise from structure."
+        },
+        heroHorizon: {
+          zh: "短線數小時；中線數週",
+          en: "Hours tactically; weeks structurally"
+        },
+        scenarioName: {
+          zh: "XAUUSD 地緣事件後跳空",
+          en: "XAUUSD gap after geopolitical shock"
+        },
+        scenarioMeta: {
+          zh: ["地緣風險", "避險跳空", "流動性真空"],
+          en: ["Geopolitical risk", "Hedging gap", "Liquidity air‑pockets"]
+        },
+        scenarioSignal: {
+          type: "neutral",
+          zh: "短線中性、中線偏多",
+          en: "Tactically neutral, structurally long‑biased"
+        },
+        scenarioDescription: {
+          zh: "突發地緣政治事件引發避險買盤，黃金在流動性較薄的時段出現跳空上升，盤中點差與滑價風險放大。",
+          en: "A sudden geopolitical event sparks hedging flows, gold gaps higher in a thin‑liquidity window, with wider spreads and slippage risk."
+        },
+        cascade: {
+          triggerTitle: {
+            zh: "地緣衝突升級與不確定性急增",
+            en: "Escalation in geopolitical tensions"
+          },
+          triggerBody: {
+            zh: "突發衝突事件提升對金融與實體經濟的尾部風險預期，避險需求瞬間放大。",
+            en: "An abrupt conflict raises perceived tail risk for financial and real economies, triggering an immediate jump in hedging demand."
+          },
+          firstOrderTitle: {
+            zh: "流動性真空中的避險跳空",
+            en: "Hedging gap through thin liquidity"
+          },
+          firstOrderBody: {
+            zh: "在流動性較薄的時段，避險買盤集中湧入，黃金價格跳空突破前期區間，價差與滑價顯著放大。",
+            en: "In a low‑liquidity window, concentrated hedging demand gaps gold beyond prior ranges, with spreads and slippage widening sharply."
+          },
+          secondOrderTitle: {
+            zh: "情緒冷卻後的結構性再配置",
+            en: "Structural repositioning after sentiment cools"
+          },
+          secondOrderBody: {
+            zh: "情緒回落後，部分避險倉位轉為中長線配置，使黃金在較高區間形成新的中期平衡。",
+            en: "As emotions normalize, some hedges morph into medium‑term allocations, anchoring gold at a higher structural range."
+          }
+        },
+        decision: {
+          stance: {
+            zh: "短線避免在流動性真空中追價，中線則視為提高黃金配置權重的起點。",
+            en: "Avoid short‑term chasing into thin liquidity; structurally treat this as a starting point to raise gold allocation."
+          },
+          confidence: { level: 0.64, text: { zh: "中等偏高", en: "Moderately high" } },
+          riskBadge: {
+            type: "dangerous",
+            zh: "特別留意點差與滑價，所有短線操作需鎖定最大可接受成本。",
+            en: "Focus on spreads and slippage; cap the all‑in cost of any tactical trade."
+          },
+          action: {
+            zh: "短線以小倉位測試回調強度，中線在情緒回落後，於較穩定區間逐步加倉黃金配置。",
+            en: "Use small tactical probes on pullbacks; medium‑term, add structural gold exposure once spreads normalize."
+          },
+          pills: {
+            zh: [
+              "不在新聞標題高峰追價",
+              "監察流動性與點差變化",
+              "把避險倉與配置倉分開管理"
+            ],
+            en: [
+              "Do not chase at headline peak",
+              "Monitor liquidity and spread regime",
+              "Separate hedge buckets from allocation buckets"
+            ]
+          }
+        },
+        memory: [
+          {
+            title: { zh: "2014–2015 地緣緊張期", en: "2014–2015 geopolitical tension episodes" },
+            tag: { zh: "避險脈衝反覆", en: "Repeated hedging pulses" },
+            event: {
+              zh: "多次地緣事件觸發黃金短線急拉後回吐。",
+              en: "Repeated geopolitical headlines triggered sharp, then fading, gold spikes."
+            },
+            decision: {
+              zh: "短線降低槓桿參與，重心放在中線配置。",
+              en: "Kept leverage low in tactical trades, focused on medium‑term allocation."
+            },
+            result: {
+              zh: "避險脈衝後多次回吐，低槓桿策略降低了情緒誤判成本。",
+              en: "Many spikes faded; low‑leverage approach reduced the cost of mis‑timed sentiment trades."
+            },
+            diff: {
+              zh: "本次事件的制裁與供應鏈外溢風險更高，黃金作為制度避險的角色更被放大。",
+              en: "Current episode carries higher sanction and supply‑chain risk, amplifying gold's role as institutional hedge."
+            }
+          },
+          {
+            title: { zh: "2019 年 貿易緊張與避險輪動", en: "2019 trade‑tension hedging rotations" },
+            tag: { zh: "輪動型避險", en: "Rotational hedge flows" },
+            event: {
+              zh: "貿易摩擦升溫時，避險資金在日圓、國債與黃金之間輪動。",
+              en: "During trade tensions, hedging flows rotated between JPY, bonds and gold."
+            },
+            decision: {
+              zh: "不在單一資產過度擁擠，分散避險工具。",
+              en: "Avoided crowding into a single hedge asset, diversified hedges."
+            },
+            result: {
+              zh: "不同事件階段的表現差異被降低，整體組合波動更平滑。",
+              en: "Performance dispersion across episodes narrowed; overall portfolio vol smoothed."
+            },
+            diff: {
+              zh: "本次避險需求更集中在黃金與美元資產，需留意相關度上升帶來的系統性風險。",
+              en: "Today, hedge demand is more concentrated in gold and USD assets, raising correlation and systemic‑risk concerns."
+            }
+          }
+        ]
+      }
+    ];
+
+    const i18nStrings = {
+      zh: {
+        brandTitle: "Athsany 決策大腦 v1",
+        brandSubtitle: "事件級聯視角的市場決策駕駛艙",
+        langLabel: "語言",
+        badgePrototype: "早期 Prototype · 非即時交易",
+        badgeFocus: "情景 → 事件級聯 → 決策 → 記憶",
+        heroTitle: "Athsany 決策大腦 v1 · 事件級聯交易視角",
+        heroSubtitle:
+          "這是一個早期 decision cockpit prototype，用「情景 → 事件級聯 → 決策輸出 → 決策記憶」呈現 HSI 與 XAUUSD 在關鍵事件下的板塊移動視角，而不是一般線性 K 線圖。",
+        flowScenario: "情景 Scenario",
+        flowCascade: "事件級聯 Event Cascade",
+        flowDecision: "決策輸出 Decision",
+        flowMemory: "決策記憶 Memory",
+        tagHSI: "HSI · 事件驅動波動",
+        tagXAU: "XAUUSD · 通脹與避險流",
+        tagView: "世界不是直線 · 事件會級聯延伸",
+        demoNote:
+          "這只是 Athsany 決策大脈絡的早期 demo，用靜態情景模擬部分核心流程，並不代表最終產品，也不構成任何投資建議。",
+        heroSideTitle: "當前情景快照 Live Scenario",
+        heroSideChip: "Prototype · 模擬訊號",
+        heroAssetLabel: "標的 Asset",
+        heroRegimeLabel: "Regime",
+        heroStanceLabel: "市場立場 Market stance",
+        heroHorizonLabel: "時間維度 Time horizon",
+        heroHeatLabel: "事件級聯強度",
+        heroFooterLeft: "模擬回測記憶 · 最多 2 個類比案例",
+        heroFooterPill1: "不連線真實交易",
+        heroFooterPill2: "用於敘事與結構探索",
+        scenarioTitle: "情景選擇 Scenario Selector",
+        scenarioSubtitle:
+          "選擇一個情景，觀察事件如何級聯，並推導出 Athsany 的市場立場與決策記憶。",
+        scenarioHint: "4 個預設情景 · HSI & XAUUSD",
+        cascadeTitle: "事件級聯 Event Cascade",
+        cascadeSubtitle:
+          "從觸發事件到第一層、第二層影響，讓市場視角從「點」變成「結構」。",
+        cascadeHint: "Trigger → First-order → Second-order",
+        triggerLabel: "Trigger（觸發）",
+        firstOrderLabel: "First-order impact（第一層影響）",
+        secondOrderLabel: "Second-order impact（第二層影響）",
+        decisionTitle: "Athsany 決策輸出 Decision Output",
+        decisionSubtitle:
+          "將事件級聯轉成可執行的市場立場、信心與風險姿態，而不是單一價格預測。",
+        decisionHint: "立場 · 信心 · 操作 · 風險姿態",
+        stanceLabel: "市場立場 Market stance",
+        confidenceLabel: "信心描述 Confidence",
+        riskLabel: "風險姿態 Risk posture",
+        actionLabel: "建議操作 Suggested action",
+        ctaSimulate: "模擬損益軌跡",
+        ctaHint: "僅為敘事 demo，不會觸發真實下單或連線到交易系統。",
+        memoryTitle: "決策記憶 Decision Memory",
+        memorySubtitle:
+          "追蹤與當前情景相似的歷史案例，對照當時事件、決策與結果，標示這次有何不同。",
+        memoryHint: "每個情景最多 1–2 個歷史類比案例"
+      },
+      en: {
+        brandTitle: "Athsany Decision Brain v1",
+        brandSubtitle: "Event‑cascade‑aware market decision cockpit",
+        langLabel: "Language",
+        badgePrototype: "Early prototype · Not live trading",
+        badgeFocus: "Scenario → Cascade → Decision → Memory",
+        heroTitle: "Athsany Decision Brain v1 · Event cascade viewpoint",
+        heroSubtitle:
+          "An early decision‑cockpit prototype that maps HSI and XAUUSD under key events through the lens of Scenario → Event Cascade → Decision Output → Decision Memory, rather than a single linear price path.",
+        flowScenario: "Scenario",
+        flowCascade: "Event Cascade",
+        flowDecision: "Decision",
+        flowMemory: "Memory",
+        tagHSI: "HSI · Event‑driven volatility",
+        tagXAU: "XAUUSD · Inflation & hedge flows",
+        tagView: "The world is non‑linear · Events cascade",
+        demoNote:
+          "This is an early Athsany decision‑flow demo using static scenarios. It does not represent the final product and is not investment advice.",
+        heroSideTitle: "Current scenario snapshot",
+        heroSideChip: "Prototype · Synthetic signals",
+        heroAssetLabel: "Asset",
+        heroRegimeLabel: "Regime",
+        heroStanceLabel: "Market stance",
+        heroHorizonLabel: "Time horizon",
+        heroHeatLabel: "Event cascade intensity",
+        heroFooterLeft: "Synthetic backtest memory · Up to 2 analogues",
+        heroFooterPill1: "No live trading connectivity",
+        heroFooterPill2: "For narrative & structure exploration",
+        scenarioTitle: "Scenario Selector",
+        scenarioSubtitle:
+          "Pick a scenario to see how events cascade into Athsany’s market stance and decision memory.",
+        scenarioHint: "4 preset scenarios · HSI & XAUUSD",
+        cascadeTitle: "Event Cascade",
+        cascadeSubtitle:
+          "From trigger to first‑ and second‑order impacts, shifting from point‑in‑time to structure‑of‑events.",
+        cascadeHint: "Trigger → First‑order → Second‑order",
+        triggerLabel: "Trigger",
+        firstOrderLabel: "First‑order impact",
+        secondOrderLabel: "Second‑order impact",
+        decisionTitle: "Athsany Decision Output",
+        decisionSubtitle:
+          "Translate the event cascade into stance, confidence and risk posture instead of a single price call.",
+        decisionHint: "Stance · Confidence · Action · Risk posture",
+        stanceLabel: "Market stance",
+        confidenceLabel: "Confidence",
+        riskLabel: "Risk posture",
+        actionLabel: "Suggested action",
+        ctaSimulate: "Simulate P&L path",
+        ctaHint:
+          "Narrative demo only · No live orders or connectivity to trading systems.",
+        memoryTitle: "Decision Memory",
+        memorySubtitle:
+          "Surface historical analogues for the current scenario and highlight what differs this time.",
+        memoryHint: "Up to 1–2 historical analogues per scenario"
+      }
+    };
+
+    let currentLang = "zh";
+    let currentScenarioId = "hsi_breakout";
+
+    function $(selector) {
+      return document.querySelector(selector);
+    }
+
+    function $all(selector) {
+      return Array.from(document.querySelectorAll(selector));
+    }
+
+    function renderScenarios() {
+      const grid = $("#scenarioGrid");
+      grid.innerHTML = "";
+      scenarios.forEach((sc) => {
+        const isActive = sc.id === currentScenarioId;
+        const div = document.createElement("div");
+        div.className = "scenario-card " + (isActive ? "" : "inactive");
+        div.dataset.id = sc.id;
+
+        const signalDotClass =
+          sc.scenarioSignal.type === "long"
+            ? "dot-long"
+            : sc.scenarioSignal.type === "short"
+            ? "dot-short"
+            : "dot-neutral";
+
+        div.innerHTML = `
+          <div class="scenario-header">
+            <div class="scenario-name">${sc.scenarioName[currentLang]}</div>
+            <div class="scenario-asset">${sc.asset[currentLang]}</div>
+          </div>
+          <div class="scenario-meta">
+            ${sc.scenarioMeta[currentLang]
+              .map((m) => `<span class="scenario-meta-chip">${m}</span>`)
+              .join("")}
+          </div>
+          <div class="scenario-description">
+            ${sc.scenarioDescription[currentLang]}
+          </div>
+          <div class="scenario-footer">
+            <div class="scenario-signal">
+              <span class="dot ${signalDotClass}"></span>
+              <span>${sc.scenarioSignal[currentLang]}</span>
+            </div>
+            <div style="font-size:10px; color:#7c86ad;">
+              ID · ${sc.id}
+            </div>
+          </div>
+        `;
+        div.addEventListener("click", () => {
+          currentScenarioId = sc.id;
+          syncScenario();
+        });
+        grid.appendChild(div);
+      });
+    }
+
+    function renderMemory() {
+      const sc = scenarios.find((s) => s.id === currentScenarioId);
+      const list = $("#memoryList");
+      list.innerHTML = "";
+      sc.memory.forEach((m) => {
+        const item = document.createElement("div");
+        item.className = "memory-item";
+        item.innerHTML = `
+          <div class="memory-header">
+            <div class="memory-title">${m.title[currentLang]}</div>
+            <div class="memory-tag">${m.tag[currentLang]}</div>
+          </div>
+          <div class="memory-row">
+            <div class="memory-label">${
+              currentLang === "zh" ? "當時事件" : "Event"
+            }</div>
+            <div class="memory-value">${m.event[currentLang]}</div>
+          </div>
+          <div class="memory-row">
+            <div class="memory-label">${
+              currentLang === "zh" ? "當時決策" : "Decision"
+            }</div>
+            <div class="memory-value">${m.decision[currentLang]}</div>
+          </div>
+          <div class="memory-row">
+            <div class="memory-label">${
+              currentLang === "zh" ? "結果" : "Result"
+            }</div>
+            <div class="memory-value">${m.result[currentLang]}</div>
+          </div>
+          <div class="memory-diff">
+            <strong>${currentLang === "zh" ? "這次有何不同" : "What’s different now"}</strong> ·
+            ${m.diff[currentLang]}
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function syncScenario() {
+      const sc = scenarios.find((s) => s.id === currentScenarioId);
+      $("#heroAsset").textContent = sc.asset[currentLang];
+      $("#heroRegime").textContent = sc.regime[currentLang];
+      $("#heroStance").textContent = sc.heroStance[currentLang];
+      $("#heroHorizon").textContent = sc.heroHorizon[currentLang];
+
+      $("#heroHeatIndicator").style.left =
+        Math.round(sc.flowHeat.position * 100) + "%";
+      $("#heroHeatText").textContent = sc.flowHeat.text[currentLang];
+
+      $("#triggerTitle").textContent = sc.cascade.triggerTitle[currentLang];
+      $("#triggerBody").textContent = sc.cascade.triggerBody[currentLang];
+      $("#firstOrderTitle").textContent =
+        sc.cascade.firstOrderTitle[currentLang];
+      $("#firstOrderBody").textContent =
+        sc.cascade.firstOrderBody[currentLang];
+      $("#secondOrderTitle").textContent =
+        sc.cascade.secondOrderTitle[currentLang];
+      $("#secondOrderBody").textContent =
+        sc.cascade.secondOrderBody[currentLang];
+
+      $("#decisionStance").textContent = sc.decision.stance[currentLang];
+      $("#confidencePointer").style.left =
+        Math.round(sc.decision.confidence.level * 100) + "%";
+      $("#confidenceText").textContent =
+        sc.decision.confidence.text[currentLang];
+      const riskBadge = $("#riskBadge");
+      riskBadge.textContent = sc.decision.riskBadge[currentLang];
+      riskBadge.classList.remove("dangerous", "neutral");
+      if (sc.decision.riskBadge.type === "dangerous") {
+        riskBadge.classList.add("dangerous");
+      } else if (sc.decision.riskBadge.type === "neutral") {
+        riskBadge.classList.add("neutral");
+      }
+
+      $("#decisionAction").textContent = sc.decision.action[currentLang];
+      const pillRow = $("#decisionPills");
+      pillRow.innerHTML = "";
+      sc.decision.pills[currentLang].forEach((p) => {
+        const span = document.createElement("span");
+        span.className = "pill";
+        span.textContent = p;
+        pillRow.appendChild(span);
+      });
+
+      renderScenarios();
+      renderMemory();
+    }
+
+    function applyLanguage() {
+      const dict = i18nStrings[currentLang];
+      $all("[data-i18n]").forEach((el) => {
+        const key = el.dataset.i18n;
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+      $all(".lang-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+      });
+      syncScenario();
+    }
+
+    function initLanguageToggle() {
+      $all(".lang-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const lang = btn.dataset.lang;
+          if (lang === currentLang) return;
+          currentLang = lang;
+          applyLanguage();
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initLanguageToggle();
+      applyLanguage();
+    });
+  </script>
+</body>
+</html>
