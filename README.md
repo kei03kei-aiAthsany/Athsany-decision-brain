@@ -46,6 +46,14 @@ Athsany 不是 Chat AI，不是文書工具，也不是普通交易訊號系統�
 
 ---
 
+## Investor-focused overview
+
+If you are an institutional investor or family office and want a structured overview of Athsany’s decision brain and architecture, please see:
+
+👉 [`docs/investor_overview.md`](docs/investor_overview.md)
+
+---
+
 ## 2. Live demo & video overview
 
 ### 🔍 Decision Cockpit Prototype
