@@ -248,11 +248,12 @@ In future UI / API designs, each output will carry **confidence and risk labels*
 
 ---
 
+## 10. 為什麼用金融作例子，但並非僅限於金融  
 ## 10. Why We Use Finance as an Example, but Are Not Limited to Finance
 
 Financial markets (e.g. major indices, FX and gold) are our most complete demonstration environment today, not the final scope of Athsany.
 
-Finance is an ideal sandbox because it provides:
+Finance is a powerful sandbox because it provides:
 
 - Dense, high‑frequency information streams.  
 - Clear outcomes and feedback loops.  
@@ -265,6 +266,11 @@ The same information → risk view → strategy → execution → review pattern
 - Supply chain and logistics decisions.  
 - Security / incident response.  
 - Any domain where information, risk, and long‑term decision evolution matter.
+
+**中文說明**
+
+目前我們用金融市場（例如指數、外匯、黃金）作為完整示範場景，因為金融可以提供高頻資訊與清晰結果，方便驗證整個決策閉環。  
+但 Athsany 的決策大腦層，從設計上就是面向任何需要資訊理解、風險判斷與長期決策演化的領域，而不是只服務金融市場。
 
 ---
 
