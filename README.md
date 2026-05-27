@@ -211,8 +211,8 @@ For a more detailed breakdown, see: [`docs/architecture.md`](docs/architecture.m
 The current demo uses HSI and XAUUSD as examples to illustrate:
 
 - An information‑driven view vs. bare price‑only / technical charts.  
-- Under major events, how to:  
-  - move from “there is news” to a structured **world radar**,  
+- Under major information shocks, how to:  
+  - move from **“a flood of information” to a structured world radar over your positions / exposure**,  
   - see which assets / segments are truly impacted, where flows might go,  
   - distinguish real impact vs. short‑term noise.
 
