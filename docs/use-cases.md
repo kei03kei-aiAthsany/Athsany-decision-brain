@@ -1,24 +1,29 @@
 # Use Cases – Where Athsany’s Decision Brain Fits
 
-Athsany is designed as a decision brain layer for **high‑uncertainty, event‑driven environments**.  
-Finance is our most complete live demonstration, but the same architecture extends into other domains.
+Athsany is designed as a decision brain layer for **high‑uncertainty, information‑ and event‑driven environments**.  
+Finance is one demonstration environment, but the same decision pattern extends into supervision, enterprise operations, and public risk.
+
+Across domains, Athsany’s core behaviour is the same:
+
+> continuously ingest information → maintain structured risk / impact views → propose actions under constraints →  
+> log decisions and outcomes into long‑term decision memory.
 
 ---
 
 ## 1. Finance / Markets
 
 **中文說明**  
-在金融市場裡，Athsany 不只是發出單次交易訊號，而是把「事件 → 風險 → 策略 → 執行 → 檢討」整條鏈路長期記錄下來，變成可追溯、可學習的決策歷史。
+在金融市場裡，Athsany 不只是發出單次交易訊號，而是把「資訊 → 風險 → 策略 → 執行 → 檢討」整條鏈路長期記錄下來，變成可追溯、可學習的決策歷史。
 
 **What Athsany sees**
 
 - Live price and order‑book movements  
-- Macro data releases, central bank events, company news  
+- Macro data releases, central‑bank events, company news  
 - Cross‑asset signals (FX, indices, commodities, rates, derivatives)
 
 **What the decision brain does**
 
-- Builds an event → risk → strategy → execution → review loop on top of markets  
+- Builds an information → risk view → strategy → execution → review loop on top of markets  
 - Tracks how portfolios respond to shocks and trends over time  
 - Records every decision, outcome, and adjustment into decision memory
 
@@ -37,14 +42,14 @@ Finance is our most complete live demonstration, but the same architecture exten
 **What Athsany sees**
 
 - Internal risk metrics, limits, and exposures  
-- Transaction and behavior signals  
+- Transaction and behaviour signals  
 - External events: regulation changes, macro stress, market disruptions
 
 **What the decision brain does**
 
-- Runs a continuous loop of event → risk → supervisory response → outcome → review  
+- Runs a continuous loop of information / events → risk assessment → supervisory response → outcome → review  
 - Builds a long‑term memory of which supervisory actions worked under which conditions  
-- Supports “small central‑bank / real‑time supervision brain” style monitoring
+- Supports a “small central‑bank / real‑time supervision brain” style of monitoring
 
 **Why it matters**
 
@@ -55,7 +60,7 @@ Finance is our most complete live demonstration, but the same architecture exten
 
 ## 3. Enterprise / Supply Chain
 
-中文說明  
+**中文說明**  
 在企業與供應鏈場景，Athsany 把原本高度依賴個人經驗、臨場判斷的決策，變成可以重複、可回顧、可優化的決策系統，幫你記住每次斷供、延誤背後的事件與選擇。
 
 **What Athsany sees**
@@ -91,7 +96,7 @@ Finance is our most complete live demonstration, but the same architecture exten
 
 **What the decision brain does**
 
-- Runs a persistent loop: event → risk assessment → response strategy → execution → review  
+- Runs a persistent loop: information / events → risk assessment → response strategy → execution → review  
 - Captures how cities or agencies respond to crises and slow‑burn risks  
 - Builds a cross‑event memory of what responses worked, where, and why
 
@@ -103,4 +108,4 @@ Finance is our most complete live demonstration, but the same architecture exten
 ---
 
 Athsany’s core does not change across these domains:  
-it remains an always‑on decision brain with long‑term decision memory, sitting above events and data, and closing the loop from **event → risk → strategy → execution → review**.
+it remains an always‑on decision brain with long‑term decision memory, sitting above events and data, and closing the loop from **information → risk view → strategy → execution → review**.
