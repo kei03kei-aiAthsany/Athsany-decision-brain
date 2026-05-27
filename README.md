@@ -248,7 +248,7 @@ In future UI / API designs, each output will carry **confidence and risk labels*
 
 ---
 
-## 10. Why Finance First, But Not Finance Only
+## 10. Why We Use Finance as an Example, but Are Not Limited to Finance
 
 Financial markets (e.g. major indices, FX and gold) are our most complete demonstration environment today, not the final scope of Athsany.
 
