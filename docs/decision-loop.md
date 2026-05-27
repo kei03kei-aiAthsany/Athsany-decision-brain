@@ -1,7 +1,7 @@
 # Decision Loop – Athsany’s Always‑On Flow
 
 Athsany is built around a single idea:  
-every important move in a live, event‑driven environment should sit inside a repeatable, inspectable **decision loop**, not be a one‑off reaction.
+every important move in a live, information‑ and event‑driven environment should sit inside a repeatable, inspectable **decision loop**, not be a one‑off reaction.
 
 ---
 
@@ -11,11 +11,11 @@ In most organisations, decisions are made in fragments:
 
 - A market move here, a policy tweak there  
 - A risk meeting today, a post‑mortem three months later  
-- Different teams reacting to the same event in different, unconnected ways
+- Different teams reacting to the same information in different, unconnected ways
 
 The results are:
 
-- No clear link from **event → risk → action → outcome**  
+- No clear link from **information / event → risk view → action → outcome**  
 - Hard to tell which reactions actually work in the long run  
 - Decision quality depends on who happens to be in the room that day
 
@@ -27,47 +27,47 @@ Athsany’s decision loop turns this into an explicit, continuous flow.
 
 At the heart of Athsany is a simple but strict loop:
 
-1. **Event** – Something changes in the environment.  
-2. **Risk state** – Athsany interprets what this event means for exposure and objectives.  
+1. **Information / Event** – Something changes in the environment.  
+2. **Risk state** – Athsany interprets what this means for exposure and objectives.  
 3. **Strategy** – It chooses or proposes a way to respond.  
 4. **Execution** – The response is carried out in the real world.  
 5. **Review** – Outcomes are analysed and written back into decision memory.
 
 This loop is not a one‑time workflow.  
-It runs continuously, across many parallel threads of events, portfolios, and domains.
+It runs continuously, across many parallel threads of information, portfolios, and domains.
 
 ---
 
-## 3. Event
+## 3. Information / Event
 
-An **event** is any signal that might require a change in posture:
+An **information / event** unit is any signal that might require a change in posture:
 
 - A sudden move in an index, currency, or spread  
 - A new regulation, policy statement, or macro data release  
 - A supplier delay, system outage, or infrastructure incident
 
-Athsany does not treat events as isolated notifications.  
+Athsany does not treat these as isolated notifications.  
 It uses them as anchors to start or update decision loops that may run for minutes, days, or years.
 
 ---
 
 ## 4. Risk state
 
-For each event, Athsany asks a focused question:  
+For each piece of information, Athsany asks a focused question:  
 “**What does this do to my risk?**”
 
 Examples of risk states:
 
 - Market: regime shift, liquidity crunch, volatility spike, correlation break  
-- Banking: limit breach risk, concentration risk, compliance risk  
+- Banking: limit‑breach risk, concentration risk, compliance risk  
 - Enterprise: supply disruption, capacity risk, reputational exposure  
-- Public: flood risk up, power grid stress, public safety risk
+- Public: flood risk up, power‑grid stress, public safety risk
 
 Athsany maps raw signals into a structured risk picture, so later we can see:
 
 - Which risks were recognised  
 - Which ones were missed  
-- How risk perception changed as events unfolded
+- How risk perception changed as situations unfolded
 
 ---
 
@@ -82,7 +82,7 @@ Once the risk state is clear enough, Athsany moves to **strategy**:
 The key is that strategy is not free‑floating.  
 It is always tied back to:
 
-- The specific event  
+- The specific information / event  
 - The risk state at that moment  
 - The long‑term objectives stored in decision memory
 
@@ -136,7 +136,7 @@ In real environments, thousands of loops run in parallel:
 Athsany:
 
 - Tracks each loop as its own thread  
-- Links them through shared events, shared risks, and shared strategies  
+- Links them through shared information, shared risks, and shared strategies  
 - Gives you one **decision brain** view on top of all of them
 
 This is how Athsany scales from one desk to a whole institution, or from one system to a whole city.
@@ -145,10 +145,10 @@ This is how Athsany scales from one desk to a whole institution, or from one sys
 
 ## 9. Relationship to architecture and memory
 
-The **architecture** provides the technical rails: data, agents, tools, and integrations.  
-The **decision memory** provides the long‑term store of events, risks, strategies, executions, and reviews.  
+The **architecture** provides the technical rails: data, tools, and integrations.  
+The **decision memory** provides the long‑term store of information, risks, strategies, executions, and reviews.  
 The **decision loop** is how everything moves, continuously.  
 
-> event → risk → strategy → execution → review → back into memory  
+> information / event → risk state → strategy → execution → review → back into memory  
 
 Together, they turn Athsany from a collection of models into an always‑on decision system and decision infrastructure.
