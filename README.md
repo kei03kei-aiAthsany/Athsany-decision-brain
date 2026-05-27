@@ -71,6 +71,13 @@ https://kei03kei-aiathsany.github.io/Athsany-decision-brain/
 
 > Early prototype only – static scenarios, synthetic / simplified signals, **no live trading**.
 
+### ✈ Flight decision demo (prototype)
+
+👉 [https://kei03kei-aiathsany.github.io/Athsany-decision-brain/examples/flight-demo/](https://kei03kei-aiathsany.github.io/Athsany-decision-brain/examples/flight-demo/)
+
+> A public demo page showing how Athsany turns pre‑departure information (boarding, weather, slots, destination changes) into a structured direction and decision layer.  
+> **Not** a full flight control system, and does not expose the internal decision engine or commercial logic.
+
 ### 🎥 29‑minute deep‑dive video
 
 [![Athsany Decision Brain Demo](https://img.youtube.com/vi/CZusGsMtbjM/maxresdefault.jpg)](https://youtu.be/CZusGsMtbjM)
