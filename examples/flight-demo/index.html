@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Athsany Decision Brain Demo · Flight</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2f;
+      --panel-2: #18223c;
+      --line: rgba(110, 168, 255, 0.18);
+      --text: #eaf1ff;
+      --muted: #9fb2d9;
+      --accent: #58c4ff;
+      --accent-2: #7ef0c9;
+      --warn: #f3b36b;
+      --danger: #ff7f8a;
+      --shadow: 0 16px 40px rgba(0,0,0,0.28);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(88,196,255,0.12), transparent 26%),
+        radial-gradient(circle at top left, rgba(126,240,201,0.08), transparent 18%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(11,16,32,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-mark {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(88,196,255,0.55);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn, .cta-btn, .lang-btn {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-size: 14px;
+    }
+
+    .chip-btn:hover, .cta-btn:hover, .lang-btn:hover {
+      border-color: rgba(88,196,255,0.35);
+      background: rgba(88,196,255,0.08);
+    }
+
+    .hero {
+      padding: 56px 0 26px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main {
+      padding: 30px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      color: var(--muted);
+      margin: 0 0 18px;
+      max-width: 58ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .cta-btn.primary {
+      background: linear-gradient(135deg, rgba(88,196,255,0.18), rgba(126,240,201,0.15));
+      border-color: rgba(88,196,255,0.28);
+    }
+
+    .hero-side {
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .mini-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .mini-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+    }
+
+    .mini-value {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .taskbar {
+      padding: 10px 0 28px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin: 0 0 14px;
+    }
+
+    .task-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .task-btn {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      min-width: 220px;
+      text-align: left;
+      transition: 0.2s ease;
+    }
+
+    .task-btn:hover,
+    .task-btn.active {
+      border-color: rgba(88,196,255,0.35);
+      background: linear-gradient(180deg, rgba(88,196,255,0.08), rgba(255,255,255,0.02));
+    }
+
+    .task-desc {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-card {
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+    .kpi-card .label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .kpi-card .value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.2fr 0.95fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .main-card {
+      padding: 20px;
+      min-height: 430px;
+    }
+
+    .card-title {
+      margin: 0 0 14px;
+      font-size: 18px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .list-item {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--panel-2);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .map-box {
+      position: relative;
+      min-height: 340px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(88,196,255,0.04), rgba(126,240,201,0.02)),
+        #0f172c;
+      background-size: 28px 28px, 28px 28px, 100% 100%, 100% 100%;
+      overflow: hidden;
+    }
+
+    .zone {
+      position: absolute;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.09);
+      backdrop-filter: blur(4px);
+    }
+
+    .zone.heat { top: 22%; left: 18%; background: rgba(255,127,138,0.18); color: #ffd6db; }
+    .zone.avoid { top: 52%; left: 28%; background: rgba(243,179,107,0.16); color: #ffe2bd; }
+    .zone.route { top: 33%; right: 14%; background: rgba(88,196,255,0.16); color: #dff5ff; }
+    .zone.watch { bottom: 16%; right: 20%; background: rgba(126,240,201,0.15); color: #ddfff3; }
+
+    .memory,
+    .about-demo {
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+
+    .footer {
+      padding: 18px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(88,196,255,0.1);
+      border: 1px solid rgba(88,196,255,0.18);
+      color: #dff5ff;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .main-grid,
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .main-card { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span>Athsany</span>
+      </div>
+      <div class="top-actions">
+        <button class="lang-btn" id="langToggle">中文 / English</button>
+        <a class="chip-btn" href="#" target="_blank" rel="noopener noreferrer" data-i18n="github">查看 GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="panel hero-main">
+          <div class="eyebrow" data-i18n="eyebrow">Decision Brain Demo · Flight</div>
+          <h1 data-i18n="heroTitle">起飛前：把 boarding、天氣、slot 變成可閱讀的決策層。</h1>
+          <p data-i18n="heroDesc">
+            這不是 flight simulator，而是一個輸入事件後自動運作的決策展示頁。
+            公開版本只展示部分流程、部分判讀層與部分方向輸出。
+          </p>
+          <div class="hero-actions">
+            <button class="cta-btn primary" data-i18n="startDemo">開始示範</button>
+            <a class="cta-btn" href="#" target="_blank" rel="noopener noreferrer" data-i18n="viewGithub">查看 GitHub</a>
+          </div>
+        </div>
+
+        <div class="panel hero-side">
+          <div class="mini-card">
+            <div class="mini-label" data-i18n="mini1Label">定位</div>
+            <div class="mini-value" data-i18n="mini1Value">Decision Brain</div>
+            <div class="muted" data-i18n="mini1Desc">不是 flight control，而是事件到方向的展示層。</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-label" data-i18n="mini2Label">公開範圍</div>
+            <div class="mini-value" data-i18n="mini2Value">Partial Demo</div>
+            <div class="muted" data-i18n="mini2Desc">不公開完整核心引擎、真實權重與商業執行邏輯。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="taskbar">
+      <h2 class="section-title" data-i18n="taskTitle">選擇一個示範事件</h2>
+      <div class="task-row" id="taskRow"></div>
+    </section>
+
+    <section class="kpi-grid">
+      <div class="kpi-card panel">
+        <div class="label" data-i18n="kpi1Label">Flight Phase</div>
+        <div class="value" data-i18n="kpi1Value">Pre-departure</div>
+      </div>
+      <div class="kpi-card panel">
+        <div class="label" data-i18n="kpi2Label">Event Types</div>
+        <div class="value" data-i18n="kpi2Value">Boarding / WX / Slot / Destination</div>
+      </div>
+      <div class="kpi-card panel">
+        <div class="label" data-i18n="kpi3Label">Output Layer</div>
+        <div class="value" data-i18n="kpi3Value">Direction First</div>
+      </div>
+      <div class="kpi-card panel">
+        <div class="label" data-i18n="kpi4Label">Decision Memory</div>
+        <div class="value" data-i18n="kpi4Value">Case Pattern</div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="panel main-card">
+        <h3 class="card-title" data-i18n="leftTitle">Event Input</h3>
+        <div class="badge" data-i18n="currentEvent">目前事件</div>
+        <div id="eventTitle" style="font-size:22px;font-weight:700;margin-bottom:10px;"></div>
+        <div id="eventDesc" class="muted"></div>
+        <div class="list" id="signalList"></div>
+      </div>
+
+      <div class="panel main-card">
+        <h3 class="card-title" data-i18n="centerTitle">Direction Layer</h3>
+        <div class="map-box">
+          <div class="zone heat" data-i18n="zoneHeat">壓力區上升</div>
+          <div class="zone avoid" data-i18n="zoneAvoid">不建議現在推進的方向</div>
+          <div class="zone route" data-i18n="zoneRoute">建議集中資源的方向</div>
+          <div class="zone watch" data-i18n="zoneWatch">下一個檢查時點</div>
+        </div>
+        <div class="list" id="directionList"></div>
+      </div>
+
+      <div class="panel main-card">
+        <h3 class="card-title" data-i18n="rightTitle">Decision Panel</h3>
+        <div class="list" id="decisionList"></div>
+      </div>
+    </section>
+
+    <section class="panel memory">
+      <h3 class="card-title" data-i18n="memoryTitle">Decision Memory</h3>
+      <p id="memoryText" class="muted"></p>
+    </section>
+
+    <section class="panel about-demo">
+      <h3 class="card-title" data-i18n="aboutTitle">About This Demo</h3>
+      <p class="muted" data-i18n="aboutDesc">
+        此頁為公開示範版本，用於展示 Athsany 如何在起飛前把事件整理成有結構的方向層。
+        公開內容不包含完整 decision engine、內部規則、真實權重、即時商業執行層或核心策略邏輯。
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>Athsany Flight Demo v1</div>
+      <div data-i18n="footerText">公開 demo 展示決策表達層，不等於完整核心系統。</div>
+    </div>
+  </footer>
+
+  <script>
+    const content = {
+      zh: {
+        github: "查看 GitHub",
+        eyebrow: "Decision Brain Demo · Flight",
+        heroTitle: "起飛前：把 boarding、天氣、slot 變成可閱讀的決策層。",
+        heroDesc: "這不是 flight simulator，而是一個輸入事件後自動運作的決策展示頁。公開版本只展示部分流程、部分判讀層與部分方向輸出。",
+        startDemo: "開始示範",
+        viewGithub: "查看 GitHub",
+        mini1Label: "定位",
+        mini1Value: "Decision Brain",
+        mini1Desc: "不是 flight control，而是事件到方向的展示層。",
+        mini2Label: "公開範圍",
+        mini2Value: "Partial Demo",
+        mini2Desc: "不公開完整核心引擎、真實權重與商業執行邏輯。",
+        taskTitle: "選擇一個示範事件",
+        kpi1Label: "Flight Phase",
+        kpi1Value: "Pre-departure",
+        kpi2Label: "Event Types",
+        kpi2Value: "Boarding / WX / Slot / Destination",
+        kpi3Label: "輸出層",
+        kpi3Value: "先出方向",
+        kpi4Label: "Decision Memory",
+        kpi4Value: "案例模式",
+        leftTitle: "Event Input",
+        centerTitle: "Direction Layer",
+        rightTitle: "Decision Panel",
+        memoryTitle: "Decision Memory",
+        aboutTitle: "About This Demo",
+        aboutDesc: "此頁為公開示範版本，用於展示 Athsany 如何在起飛前把事件整理成有結構的方向層。公開內容不包含完整 decision engine、內部規則、真實權重、即時商業執行層或核心策略邏輯。",
+        footerText: "公開 demo 展示決策表達層，不等於完整核心系統。",
+        currentEvent: "目前事件",
+        zoneHeat: "壓力區上升",
+        zoneAvoid: "不建議現在推進的方向",
+        zoneRoute: "建議集中資源的方向",
+        zoneWatch: "下一個檢查時點"
+      },
+      en: {
+        github: "View GitHub",
+        eyebrow: "Decision Brain Demo · Flight",
+        heroTitle: "Pre-departure: turn boarding, weather, and slots into a readable decision layer.",
+        heroDesc: "This is not a flight simulator. It is a public decision demo page that starts from pre-departure events and shows how structure and direction can be presented.",
+        startDemo: "Start Demo",
+        viewGithub: "View GitHub",
+        mini1Label: "Positioning",
+        mini1Value: "Decision Brain",
+        mini1Desc: "Not a flight control system, but a presentation layer from event to direction.",
+        mini2Label: "Public Scope",
+        mini2Value: "Partial Demo",
+        mini2Desc: "Does not expose the full core engine, real weighting, or execution logic.",
+        taskTitle: "Choose a demo event",
+        kpi1Label: "Flight Phase",
+        kpi1Value: "Pre-departure",
+        kpi2Label: "Event Types",
+        kpi2Value: "Boarding / WX / Slot / Destination",
+        kpi3Label: "Output Layer",
+        kpi3Value: "Direction First",
+        kpi4Label: "Decision Memory",
+        kpi4Value: "Case Pattern",
+        leftTitle: "Event Input",
+        centerTitle: "Direction Layer",
+        rightTitle: "Decision Panel",
+        memoryTitle: "Decision Memory",
+        aboutTitle: "About This Demo",
+        aboutDesc: "This page is a public demonstration layer showing how Athsany turns pre-departure events into a structured direction layer. It does not include the full decision engine, internal rules, real weighting, live commercial execution, or core strategy logic.",
+        footerText: "This public demo shows the presentation layer, not the full core system.",
+        currentEvent: "Current Event",
+        zoneHeat: "Pressure zone rising",
+        zoneAvoid: "Not recommended direction right now",
+        zoneRoute: "Suggested focus direction",
+        zoneWatch: "Next review point"
+      }
+    };
+
+    const scenarios = {
+      zh: [
+        {
+          title: "登機延誤 18 分鐘",
+          short: "已知類型延誤，先穩定登機秩序，再重排地面節奏。",
+          desc: "系統正在整理登機延誤對地勤節奏、起飛窗口與轉機旅客風險的影響。",
+          signals: [
+            "Turnaround 緩衝被消耗 18 分鐘",
+            "地勤任務開始擠在同一時間帶",
+            "原本的起飛窗口變得緊張",
+            "短轉機旅客風險上升"
+          ],
+          directions: [
+            "先離開只追時間的心態，回到穩定登機順序",
+            "以新的 realistic readiness time 重排地面任務",
+            "暫不強行追原本 slot，保留節奏調整空間",
+            "於 15–20 分鐘後再檢查 slot 與轉機壓力"
+          ],
+          decisions: [
+            "Immediate impact：登機延誤吞掉 turnaround buffer",
+            "Secondary impact：地勤任務節奏被擠壓",
+            "Suggested move：先穩定登機，再重排任務，再談 slot",
+            "Watchpoint：15–20 分鐘後重新評估是否追舊 slot"
+          ],
+          memory:
+            "過往登機延誤中，真正的風險很多時候不是延誤本身，而是為了追時間打亂了登機與地面流程的順序。當流程保持有序時，延誤較易吸收；當順序失衡時，後續修正成本會成倍增加。"
+        },
+        {
+          title: "起飛前 30 分鐘天氣惡化",
+          short: "預期中的風險點惡化，需重估 minima 與起飛條件。",
+          desc: "系統正在重估惡劣天氣對離場程序、能見度限制與起飛窗口的影響。",
+          signals: [
+            "最新天氣報告低於先前預期",
+            "能見度與雲底高度接近 minima",
+            "離場程序與 runway config 可能需要更改",
+            "可能觸發等待天氣改善這一類決策"
+          ],
+          directions: [
+            "將優先順序由時間切換到是否仍滿足安全條件",
+            "先確認新天氣是否仍在可接受的 minima 範圍內",
+            "如接近臨界值，考慮暫停 push 或起飛，等待窗口再決定",
+            "以安全層為唯一決策準則，再談時間與班次安排"
+          ],
+          decisions: [
+            "Immediate impact：原計畫起飛條件不再穩定",
+            "Secondary impact：後續時刻表可能需要順延",
+            "Suggested move：先在安全層作 go / wait 判斷，再重排下游節奏",
+            "Watchpoint：持續監測更新報告，不在臨界值上勉強起飛"
+          ],
+          memory:
+            "過往惡劣天氣個案中，強行維持原定起飛時間往往帶來更高後續成本，而在安全條件清晰後再重排，整體運營與安全表現反而更穩定。"
+        },
+        {
+          title: "起飛窗口被重新分配",
+          short: "跑道容量管理改變起飛順序，決策中心轉到新 slot。",
+          desc: "系統正在整理 slot 重新分配對 readiness 時間、地面節奏與到達時間的影響。",
+          signals: [
+            "原先分配的起飛時段被延後",
+            "部分航班優先順序被重新排序",
+            "地面作業可用時間被拉長",
+            "下游到達與轉機節奏需要更新"
+          ],
+          directions: [
+            "把真實中心由舊 timetable 換成新 slot",
+            "利用多出的時間平衡地面作業，而不是空等",
+            "同步更新機組與地勤對新 slot 的共同認知",
+            "在新節奏下重新檢視 connection 與 crew duty 限制"
+          ],
+          decisions: [
+            "Immediate impact：起飛節奏重新 anchor 到新 slot",
+            "Secondary impact：原本 buffer 被重新分配",
+            "Suggested move：以新 slot 為基準重排，而不是硬塞回舊 slot",
+            "Watchpoint：避免最後一刻頻繁改 TOBT，減少整體排序震盪"
+          ],
+          memory:
+            "在協同決策環境下，多次在最後一刻改變目標離場時間，往往會打亂整體排序並降低準點率。當視角固定在新 slot 是新的真實起點，整體運行會更穩定。"
+        },
+        {
+          title: "目的地機場突然暫停降落",
+          short: "原定到達場不可用，需要即時進入 contingency mode。",
+          desc: "系統正在評估目的地關場對備降選擇、燃油餘量與整體 network 節奏的影響。",
+          signals: [
+            "最新報告顯示目的地暫停降落（天氣或跑道阻塞等）",
+            "原本備降安排需要重新評估",
+            "燃油與時間 margin 接近預留值",
+            "多個航班同步受影響，network 壓力升高"
+          ],
+          directions: [
+            "立即由按原計畫執行切換到 contingency mode",
+            "先確定最實際、最安全的備降選擇，而不是死守原目的地",
+            "同步考慮燃油、天氣與 network 壓力，而不是單一維度",
+            "決策確定後，分層次向機組、乘客、運營層清晰溝通"
+          ],
+          decisions: [
+            "Immediate impact：原計畫到達場不再可行",
+            "Secondary impact：整體 network 與旅客體驗受影響",
+            "Suggested move：先鎖定安全可行的備降場，再討論 schedule 回復",
+            "Watchpoint：避免在高度不確定時頻繁改變目的地與備降選擇"
+          ],
+          memory:
+            "過往類似事件中，真正造成混亂的通常不是第一次改變目的地，而是在短時間內多次反覆改變。清晰的決策順序與溝通流程，往往比微調路線本身更關鍵。"
+        }
+      ],
+      en: [
+        {
+          title: "Boarding Delayed by 18 Minutes",
+          short:
+            "Known type of delay; stabilise boarding first, then resequence ground tasks.",
+          desc:
+            "The system is mapping how a boarding delay affects ground rhythm, the departure window, and connection risk.",
+          signals: [
+            "Turnaround buffer is reduced by 18 minutes",
+            "Ground tasks begin to crowd into the same time band",
+            "The original departure window becomes tight",
+            "Risk for short-connection passengers increases"
+          ],
+          directions: [
+            "Step out of a pure \"chase time\" mindset and anchor on boarding integrity first",
+            "Use the new realistic readiness time to resequence ground tasks",
+            "Do not immediately force a return to the original slot; keep room for adjustments",
+            "Recheck slot and connection pressure after 15–20 minutes"
+          ],
+          decisions: [
+            "Immediate impact: boarding delay consumes turnaround buffer",
+            "Secondary impact: ground rhythm is compressed into a smaller window",
+            "Suggested move: stabilise boarding, then resequence tasks, then reconsider the slot",
+            "Watchpoint: reassess the need to chase the old slot after 15–20 minutes"
+          ],
+          memory:
+            "In past boarding delays, the main operational risk often did not come from the delay itself, but from disrupting the sequence of boarding and ground tasks in an attempt to catch up. When sequence stayed intact, delays were easier to absorb; when sequence broke, correction costs rose sharply."
+        },
+        {
+          title: "Weather Deteriorates 30 Minutes Before Departure",
+          short:
+            "A known risk point worsens; minima and departure conditions must be re-evaluated.",
+          desc:
+            "The system is reassessing how deteriorating weather changes departure procedures, visibility limits, and the usable departure window.",
+          signals: [
+            "Latest weather report is worse than earlier forecasts",
+            "Visibility and ceiling move close to minima",
+            "Departure procedures and runway configuration may need to change",
+            "A \"wait for improvement\" decision may be required"
+          ],
+          directions: [
+            "Shift priority from \"time\" to \"whether conditions still meet safety requirements\"",
+            "First confirm whether the new weather is still within acceptable minima",
+            "If near the edge, consider pausing pushback or departure and wait for a clearer window",
+            "Let the safety layer be the only decision criterion before reintroducing schedule considerations"
+          ],
+          decisions: [
+            "Immediate impact: the original departure conditions are no longer stable",
+            "Secondary impact: downstream schedule may need to move",
+            "Suggested move: make a clear go / wait decision at the safety layer, then rebuild the schedule",
+            "Watchpoint: follow updated reports rather than operating at the margin of minima"
+          ],
+          memory:
+            "In past weather events, insisting on the original departure time often created higher downstream costs. Waiting for a clearer safety picture before resequencing produced more stable operational and safety outcomes."
+        },
+        {
+          title: "Departure Slot Reassigned",
+          short:
+            "Capacity management changes the departure sequence; the new slot becomes the anchor.",
+          desc:
+            "The system is organising how a reassigned slot affects readiness timing, ground rhythm, and arrival expectations.",
+          signals: [
+            "The initially assigned departure window is delayed",
+            "Some flights are reprioritised in the sequence",
+            "More time becomes available for ground operations",
+            "Downstream arrival and connection timing must be updated"
+          ],
+          directions: [
+            "Treat the new slot as the real centre of gravity, not the old timetable",
+            "Use the additional time to balance ground tasks, not to idle",
+            "Align cockpit and ground teams around the new slot as the single shared assumption",
+            "Re-check connections and crew duty constraints under the new rhythm"
+          ],
+          decisions: [
+            "Immediate impact: departure rhythm is re-anchored on the new slot",
+            "Secondary impact: existing buffers are redistributed",
+            "Suggested move: rebuild around the new slot instead of forcing a return to the old one",
+            "Watchpoint: avoid frequent last-minute TOBT changes that destabilise the overall sequence"
+          ],
+          memory:
+            "In collaborative decision-making environments, repeated last-minute changes to target off-block times tend to disrupt sequencing and reduce punctuality. Treating the new slot as the new reality leads to more stable operations."
+        },
+        {
+          title: "Destination Airport Suddenly Suspends Arrivals",
+          short:
+            "The planned destination is unavailable; contingency mode is required.",
+          desc:
+            "The system is evaluating how a destination closure affects diversion choices, fuel margins, and overall network rhythm.",
+          signals: [
+            "Latest reports show arrivals at the destination are suspended (weather, runway blockage, etc.)",
+            "Original diversion plan must be re-evaluated",
+            "Fuel and time margins are moving closer to reserved levels",
+            "Multiple flights are affected, increasing network pressure"
+          ],
+          directions: [
+            "Switch from executing the original plan into contingency mode immediately",
+            "Lock in a practical and safe diversion choice instead of clinging to the original destination",
+            "Consider fuel, weather, and network pressure together, not in isolation",
+            "After the decision, communicate the sequence clearly to crew, passengers, and operations"
+          ],
+          decisions: [
+            "Immediate impact: the original destination is no longer viable",
+            "Secondary impact: the wider network and passenger experience are affected",
+            "Suggested move: secure a safe and workable diversion first, then discuss schedule recovery",
+            "Watchpoint: avoid frequent changes of destination and diversion when uncertainty is still high"
+          ],
+          memory:
+            "In prior events, most confusion did not come from the first change of destination, but from several rapid reversals. A clear decision sequence and communication flow proved more important than micro-optimising the exact route."
+        }
+      ]
+    };
+
+    let currentLang = "zh";
+    let currentIndex = 0;
+
+    const taskRow = document.getElementById("taskRow");
+    const eventTitle = document.getElementById("eventTitle");
+    const eventDesc = document.getElementById("eventDesc");
+    const signalList = document.getElementById("signalList");
+    const directionList = document.getElementById("directionList");
+    const decisionList = document.getElementById("decisionList");
+    const memoryText = document.getElementById("memoryText");
+
+    function renderTexts() {
+      document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (content[currentLang][key]) {
+          el.textContent = content[currentLang][key];
+        }
+      });
+    }
+
+    function renderTasks() {
+      taskRow.innerHTML = "";
+      scenarios[currentLang].forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "task-btn" + (index === currentIndex ? " active" : "");
+        btn.innerHTML = `
+          <div>${item.title}</div>
+          <div class="task-desc">${item.short}</div>
+        `;
+        btn.addEventListener("click", () => {
+          currentIndex = index;
+          renderTasks();
+          renderScenario();
+        });
+        taskRow.appendChild(btn);
+      });
+    }
+
+    function renderScenario() {
+      const item = scenarios[currentLang][currentIndex];
+      eventTitle.textContent = item.title;
+      eventDesc.textContent = item.desc;
+      signalList.innerHTML = item.signals.map(text => `<div class="list-item">${text}</div>`).join("");
+      directionList.innerHTML = item.directions.map(text => `<div class="list-item">${text}</div>`).join("");
+      decisionList.innerHTML = item.decisions.map(text => `<div class="list-item">${text}</div>`).join("");
+      memoryText.textContent = item.memory;
+    }
+
+    document.getElementById("langToggle").addEventListener("click", () => {
+      currentLang = currentLang === "zh" ? "en" : "zh";
+      renderTexts();
+      renderTasks();
+      renderScenario();
+    });
+
+    document.querySelector("[data-i18n='startDemo']").addEventListener("click", () => {
+      currentLang = "zh";
+      currentIndex = 0;
+      renderTexts();
+      renderTasks();
+      renderScenario();
+      window.scrollTo({ top: document.querySelector(".taskbar").offsetTop - 40, behavior: "smooth" });
+    });
+
+    // 初始渲染
+    renderTexts();
+    renderTasks();
+    renderScenario();
+  </script>
+</body>
+</html>
